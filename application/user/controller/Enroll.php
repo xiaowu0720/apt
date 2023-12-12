@@ -19,10 +19,10 @@ class Enroll extends Controller{
     }
 
     //用户注册
-    //暂时没有设置验证码
     public function user_enroll(){
         $phone=$this->info['phone'];
         $password=$this->info['password'];
+        $code = $this->info['code'];
         $data=[
             'phone'=>$phone,
             'password'=>$password
@@ -31,6 +31,6 @@ class Enroll extends Controller{
         if(!$validate->check($data)){
             echoJson(0,$validate->getError());
         }
-        $this->user->user_enroll($phone,$password);
+        $this->user->user_enroll($phone,$password,$code);
     }
 }

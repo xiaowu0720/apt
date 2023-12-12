@@ -20,6 +20,7 @@ class Login extends Controller {
         $this->info=$_POST;
     }
     public function user_login(Request $request){
+
         $phone=$request->post('phone');
         $password=$request->post('password');
         $data=[

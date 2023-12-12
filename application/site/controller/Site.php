@@ -27,6 +27,10 @@ class Site extends Controller
     {
         $page = $request->param('page',1);
         $count = $request->param('count',10);
+        $name = $request->param('name',null);
+        $address = $request->param('address',null);
+        $province = $request->param('province',null);
+        $county = $request->param('county',null);
 
         if (empty($page)) {
             $page = 1;
@@ -35,7 +39,7 @@ class Site extends Controller
             $count = 10;
         }
 
-        $this->site->siteindex($page, $count);
+        $this->site->siteindex($page, $count, $name, $address, $province, $county);
     }
 
 
@@ -54,8 +58,7 @@ class Site extends Controller
             'longitude' => $request->param('longitude'),
             'latitude'  => $request->param('latitude'),
             'address'   => $request->param('address'),
-            'province'  => $request->param('province'),
-            'county'    => $request->param('county'),
+            'cityid'  => $request->param('cityid'),
             'time'      => $time
         ];
 
@@ -92,7 +95,7 @@ class Site extends Controller
         if (empty($page)) {
             $page = 1;
         }
-        if(empty($count)){
+        if(empty($count)) {
             $count = 10;
         }
 
@@ -109,12 +112,11 @@ class Site extends Controller
      */
     public function update(Request $request, $id)
     {
-        $name = $_REQUEST['name'];
-        $longitude = $_REQUEST['longitude'];
-        $latitude = $_REQUEST['latitude'];
-        $address = $_REQUEST['address'];
-        $province = $_REQUEST['province'];
-        $county = $_REQUEST['county'];
+        $name = $request->param('name', null);
+        $longitude = $request->param('longitude', null);
+        $latitude = $request->param('latitude', null);
+        $address = $request->param('address', null);
+        $cityid = $request->param('cityid', null);
 
         $data = [];
 
@@ -133,13 +135,11 @@ class Site extends Controller
         if (!empty($address)) {
             $data['address'] = $address;
         }
-
-        if (!empty($province)) {
-            $data['province'] = $province;
-        }
-
-        if (!empty($county)) {
-            $data['county'] = $county;
+        if (!empty($cityid)) {
+            $temp = Db::table('citylist')->where('id', $cityid)->select();
+            $data['cityid'] = $cityid;
+            $data['province'] = $temp[0]['province'];
+            $data['county'] = $temp[0]['cityname'];
         }
 
         $this->site->siteupdate($id,$data);

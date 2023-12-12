@@ -51,7 +51,10 @@ class City extends Controller
      */
     public function save(Request $request)
     {
-        $info=$_POST;
+        $info = [
+            'cityname' => $request->param('cityname'),
+            'province' => $request->param('province')
+        ];
         $data=[
             'id'=>Db::table('citylist')->count()+1,
             'cityname'=>$info['cityname'],//城市名称
@@ -130,11 +133,20 @@ class City extends Controller
         foreach ($temp as $temp1) {
             $temp2 = Db::table('citylist')
                 ->where('province', $temp1['province'])
-                ->field('cityname')
+                ->field('cityname, id')
                 ->select();
+            $temp4 = [];
+            $index = 0;
+            foreach ($temp2 as $value) {
+                $temp4 = Db::table('site')
+                    ->where('cityid', $value['id'])
+                    ->select();
+                $temp2[$index]['site'] = $temp4;
+                $index = $index + 1;
+            }
             $temp3 = [
                 'province' => $temp1['province'],
-                'city'     => $temp2
+                'city'     => $temp2,
             ];
             $data[] = $temp3;
         }

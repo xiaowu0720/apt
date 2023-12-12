@@ -78,3 +78,14 @@ function distance($x1, $y1, $x2, $y2)
     $distance = sqrt(pow(($x2 - $x1), 2) + pow(($y2 - $y1), 2));
     return $distance;
 }
+
+
+function generateCode($length) {
+    $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $code = '';
+    for ($i = 0; $i < $length; $i++) {
+        $code .= $chars[rand(0, strlen($chars) - 1)];
+    }
+    return $code;
+}
+

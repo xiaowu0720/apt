@@ -1,6 +1,7 @@
 <?php
 namespace app\user\model;
 use app\common\model\Base;
+use think\captcha\Captcha;
 use app\common\model\Jwt_base;
 use think\Db;
 use think\Model;
@@ -32,10 +33,10 @@ class User extends Model{
         }
     }
     //用户注册
-    public function user_enroll($phone,$password){
-//        if($this->verify_captcha($code)){
-//            echoJson(0,"验证码错误");
-//        }
+    public function user_enroll($phone,$password,$code){
+        if($this->verify_captcha($code)){
+            echoJson(0,"验证码错误");
+        }
         $data=Db::table('user')->where('phone',$phone)->select();
         if(!empty($data)){
             echoJson(0,'手机号已被注册');
@@ -56,24 +57,12 @@ class User extends Model{
         }
     }
     //验证验证码
-    public function verify_captcha($userInput)
+    public function verify_captcha($code)
     {
-        // 创建新的验证码实例，并使用与生成验证码时相同的配置
-        $config = [
-            'length' => 4,
-            'fontSize' => 25,
-            'useNoise' => true,
-            'imageH' => 50,
-            'imageW' => 200,
-            'fontttf' => '4.ttf',
-        ];
-        $captcha = new \think\captcha\Captcha($config);
-
-        // 调用check方法验证用户输入的验证码
-        if ($captcha->check($userInput)) {
+        $captcha = new Captcha();
+        if ($captcha->check($code)) {
             return false;
         } else {
-            // 验证码不匹配
             return true;
         }
     }

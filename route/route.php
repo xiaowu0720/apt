@@ -39,12 +39,16 @@ Route::put('bind','equipment/Devicemg/bindequipent')->middleware(['Auth']);
 //禁用设备
 Route::put('disable','equipment/Devicemg/disablequipment')->middleware(['Auth']);
 
-Route::get('oss', 'aliyun/Getsignature/getOssSignature');
+Route::get('oss', 'aliyun/Getsignature/getOssSignature')->middleware(['Auth']);
 
 
 
 //app商店列表
 Route::get('liststore','store/Store/liststore')->middleware(['UserLoginAuth']);
+//用户注册
+Route::post('enroll','user/Enroll/user_enroll');
+//获取验证码
+Route::get('getcode','user/Getcode/getcode');
 //用户登录
 Route::post('user/login','user/Login/user_Login');
 //获取实时数据
@@ -60,7 +64,7 @@ Route::get('calendardata','data/Calendar/data')->middleware(['UserLoginAuth']);
 //月度排名
 Route::get('ranking', 'data/Monthly/data')->middleware(['UserLoginAuth']);
 //用户信息
-Route::get('message', 'user/usermessage/usermessage')->middleware(['UserLoginAuth']);
+Route::get('infor', 'user/usermessage/usermessage')->middleware(['UserLoginAuth']);
 //站点列表
 Route::get('sitelist','collection/Collection/sitelist')->middleware(['UserLoginAuth']);
 //收藏得实时数据

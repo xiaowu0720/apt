@@ -13,8 +13,6 @@ class Sitev extends Validate
         'longitude' => 'require',
         'latitude'  => 'require',
         'address'   => 'require',
-        'province'  => 'require',
-        'county'    => 'require',
     ];
 
     protected $message = [

@@ -33,7 +33,7 @@ class Data extends Controller{
                 'time' => date('H:i:s'),
                 'temperature' => 0,
                 'humidity' => 0,
-                'pm2.5' => 0,
+                'pm25' => 0,
                 'pm10' => 0,
                 'co' => 0,
                 'co2' => 0,
@@ -44,7 +44,7 @@ class Data extends Controller{
             );
         } else {
             $dataArray = explode(' ', $data);
-            $keys = array('date', 'time', 'temperature', 'humidity', 'pm2.5', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
+            $keys = array('date', 'time', 'temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
             $result = array_combine($keys, $dataArray);
         }
 
@@ -463,6 +463,7 @@ class Data extends Controller{
             $temp1 = distance($longitude, $latitude, $temp['longitude'], $temp['latitude']);
             if($temp1 < $min){
                 $data = $temp;
+                $min = $temp1;
             }
         }
         echoJson(1,'',$data);

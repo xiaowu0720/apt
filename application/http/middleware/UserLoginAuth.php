@@ -13,7 +13,8 @@ class UserLoginAuth
     public function handle(Request $request, \Closure $next)
     {
         $jwt = new Jwt_base();
-        $jwt->check();
+        $data = $jwt->check();
+        $request->data = $data;
         return $next($request);
     }
 }

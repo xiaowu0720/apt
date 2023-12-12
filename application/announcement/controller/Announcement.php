@@ -79,10 +79,14 @@ class Announcement extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->info=$_REQUEST;
-        $minaqi=$this->info['minaqi'];
-        $maxaqi=$this->info['maxaqi'];
-        $content=$this->info['content'];
+        $minaqi = $request->put('minaqi');
+        $maxaqi = $request->put('maxaqi');
+        $content = $request->put('content');
+
+//        $this->info=$_REQUEST;
+//        $minaqi=$this->info['minaqi'];
+//        $maxaqi=$this->info['maxaqi'];
+//        $content=$this->info['content'];
         $this->anno->updateannouncement($id,$minaqi,$maxaqi,$content);
     }
 
