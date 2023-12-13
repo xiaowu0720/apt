@@ -34,7 +34,9 @@ class User extends Model{
     }
     //用户注册
     public function user_enroll($phone,$password,$code){
-        if($this->verify_captcha($code)){
+        $redis = init_redis();
+        $temp = $redis->hGet($phone,'code');
+        if($temp != $code){
             echoJson(0,"验证码错误");
         }
         $data=Db::table('user')->where('phone',$phone)->select();

@@ -18,7 +18,7 @@ function echoJson($code,$msg,$result=[],$page=null,$count=10)
     {
         $arr = array("code"=>$code,"msg"=>$msg,"result"=>$result);
     }else{
-        $resultArr["data"]   = $result;
+        $resultArr ["data"]= $result;
         $resultArr["page"]   = $page;
         $resultArr["count"]  = $count;
         $arr = array("code"  => $code, "msg" => $msg, "result" => $resultArr);

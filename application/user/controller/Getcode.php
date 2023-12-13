@@ -20,12 +20,15 @@ class Getcode extends Controller{
         $this->user=new User();
     }
     public function getcode(){
-        $config =    [
-            'fontSize'    =>    30,    // 验证码字体大小
-            'length'      =>    4,     // 验证码位数
-            'useNoise'    =>    true, // 关闭验证码杂点
-        ];
-        $captcha = new Captcha($config);
-        return $captcha->entry();
+        $phone = $_GET['phone'];
+        $redis = init_redis();
+        $temp = $redis->ttl($phone);
+        if ($temp != -1 && $temp != -2){
+            echoJson(0,'请不要重复调用');
+        }
+        $verification_code = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $redis->hSet($phone,'code',$verification_code);
+        $redis->expire($phone, 180);
+        echoJson(1,'验证码', $verification_code);
     }
 }

@@ -13,7 +13,6 @@ class SiteModel extends Model
     {
         $data = Db::table('site');
         $count1 = Db::table('site');
-        echo $name;
         if (!empty($name)) {
             $data->where('name','like','%'.$name.'%');
             $count1->where('name','like','%'.$name.'%');
