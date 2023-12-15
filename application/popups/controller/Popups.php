@@ -22,7 +22,10 @@ class Popups extends Controller
     public function getpopups()
     {
         $currentDate = date('Y-m-d'); // 获取当前日期，格式为 "YYYY-MM-DD"
-        $data = Db::table('send_message')->where('date', $currentDate)->select();
+        $data = Db::table('send_message')
+            ->where('start_date', '>=',$currentDate)
+            ->where('end_date', '<=',$currentDate)
+            ->select();
         echoJson(1, '', $data);
     }
     /**
@@ -55,10 +58,11 @@ class Popups extends Controller
     public function save(Request $request)
     {
         $data=[
-            'date'    => $request->param('date',null),
-            'content' => $request->param('content',null),
-            'title'   => $request->param('title',null),
-            'image'   => $request->param('image',null)
+            'start_date'    => $request->param('start_date',null),
+            'end_date'      => $request->param('end_date',null),
+            'content'       => $request->param('content',null),
+            'title'         => $request->param('title',null),
+            'image'         => $request->param('image',null)
         ];
         $validate=new Popupsv();
         if(!$validate->check($data)){
@@ -96,8 +100,10 @@ class Popups extends Controller
         $temp = Db::table('send_message');
 
         if (!empty($year)) {
-            $data = $data->where('date','like',$year.'%');
-            $temp = $data->where('date','like',$year.'%');
+            $data = $data->where('start_date','like',$year.'%')
+                ->whereOr('end_date','like',$year.'%');
+            $temp = $data->where('start_date','like',$year.'%')
+                ->whereOr('end_date','like',$year.'%');
         }
 
         if (!empty($month)) {
@@ -105,16 +111,20 @@ class Popups extends Controller
                 $month = str_pad($month, 2, '0', STR_PAD_LEFT);
 
             }
-            $data = $data->where('date','like','_____'.$month.'___');
-            $temp = $data->where('date','like','_____'.$month.'___');
+            $data = $data->where('start_date','like','_____'.$month.'___')
+                ->whereOr('end_date','like','_____'.$month.'___');
+            $temp = $data->where('start_date','like','_____'.$month.'___')
+                ->whereOr('end_date','like','_____'.$month.'___');
         }
 
         if (!empty($day)) {
             if ($day) {
                 $day = str_pad($day, 2,'0',STR_PAD_LEFT);
             }
-            $data = $data->where('date','like','________'.$day);
-            $temp = $data->where('date','like','________'.$day);
+            $data = $data->where('start_date','like','________'.$day)
+                ->whereOr('end_date','like','________'.$day);
+            $temp = $data->where('start_date','like','________'.$day)
+                ->whereOr('end_date','like','________'.$day);
         }
 
         if (!empty($title)) {
@@ -143,7 +153,7 @@ class Popups extends Controller
      */
     public function update(Request $request, $id)
     {
-        $date = $request->param('date',null);
+        $date = $request->param('start_date',null);
         $data = [];
 
         if (!empty($date)) {
@@ -190,32 +200,19 @@ class Popups extends Controller
 
     public function history(Request $request)
     {
-        $year = $request->param('year',null);
-        $month = $request->param('month',null);
-        $day = $request->param('day',null);
+        $date = $request->param('date', null);
         $title = $request->param('title',null);
         $currentDate = date('Y-m-d'); // 获取当前日期
 
         $data = Db::table('send_message')
-            ->where('date', '<', $currentDate);
+            ->where('start_date','<=',$currentDate);
 
-        if (!empty($year)) {
-            $data = $data->where('date','like',$year.'%');
+
+        if (!empty($date)) {
+            $data = $data->whereColumn($date, '>=', 'start_date')
+                ->whereColumn($date, '<=', 'end_date');;
         }
 
-        if (!empty($month)) {
-            if ($month) {
-                $month = str_pad($month, 2, '0', STR_PAD_LEFT);
-            }
-            $data = $data->where('date','like','_____'.$month.'___');
-        }
-
-        if (!empty($day)) {
-            if ($day) {
-                $day = str_pad($day, 2,'0',STR_PAD_LEFT);
-            }
-            $data = $data->where('date','like','________'.$day);
-        }
 
         if (!empty($title)) {
             $data = $data->where('title','like','%'.$title.'%');

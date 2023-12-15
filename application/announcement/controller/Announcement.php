@@ -50,11 +50,10 @@ class Announcement extends Controller
      */
     public function save(Request $request)
     {
-        $info=$_POST;
         $id=Db::table('announcement')->count()+1;
-        $minaqi=$info['minaqi'];
-        $maxaqi=$info['maxaqi'];
-        $content=$info['content'];
+        $minaqi = $request->param('minaqi');
+        $maxaqi = $request->param('maxaqi');
+        $content = $request->param('content');
         $this->anno->addannouncement($id,$minaqi,$maxaqi,$content);
     }
 
