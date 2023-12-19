@@ -37,12 +37,29 @@ class Collectionm extends Model
         $data = [];
         foreach ($temp as $temp1) {
             $data1 = $redis->get($temp1['name']);
+            if (empty($data1)) {
+                $result = array(
+                    'date' => date('Y-m-d'),
+                    'time' => date('H:i:s'),
+                    'temperature' => 0,
+                    'humidity' => 0,
+                    'pm25' => 0,
+                    'pm10' => 0,
+                    'co' => 0,
+                    'co2' => 0,
+                    'aqi' => 0,
+                    'api' => 0,
+                    'primarypollutants' => 0,
+                    'color' => 0
+                );
+            }else {
+                $dataArray = explode(' ', $data1);
 
-            $dataArray = explode(' ', $data1);
+                $keys = array('date', 'time', 'temperature', 'humidity', 'pm2.5', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
 
-            $keys = array('date', 'time', 'temperature', 'humidity', 'pm2.5', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
+                $result = array_combine($keys, $dataArray);
+            }
 
-            $result = array_combine($keys, $dataArray);
             $temp2 = [
                 'name' => $temp1['name'],
                 'data' => $result,

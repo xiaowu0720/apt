@@ -34,20 +34,20 @@ class Collection extends Controller
 
     public function add(Request $request)
     {
-        $id = $request->param('id');
+        $id = ($request->data)['id'];
         $siteid = $request->param('siteid');
         $this->coll->add($id,$siteid);
     }
 
     public function colist(Request $request)
     {
-        $id = $request->param('id');
+        $id = ($request->data)['id'];
         $this->coll->colist($id);
     }
 
     public function del(Request $request)
     {
-        $id = $request->param('id');
+        $id = ($request->data)['id'];
         $siteid = $request->param('siteid');
 
         $this->coll->del($id,$siteid);
