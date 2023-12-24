@@ -12,8 +12,9 @@ class Datam extends Model
     public function ranking($action, $manner)
     {
         $manner = strtolower($manner);
-        if($manner == 'pm2.5') {
-            $manner = 'pm25';
+        $temp1 = $manner;
+        if($manner == 'pm25') {
+            $temp1 = 'pm2.5';
         }
         $temp = Db::table('site')
             ->field('name')
@@ -23,7 +24,7 @@ class Datam extends Model
             $month = date('Y_m');
             foreach ($temp as $a) {
                 $result = Db::table($month.'site')
-                    ->field('site,'. $manner)
+                    ->field('site,`'. $temp1.'`')
                     ->where('site', $a['name'])
                     ->order('time', 'desc')
                     ->limit('1')
@@ -31,18 +32,18 @@ class Datam extends Model
                 if (empty($result)) {
                     $data[] = [
                         'site'  => $a['name'],
-                        $manner => null,
+                        'value' => null,
                     ];
                 }else {
                     $data[] = [
                         'site'  => $a['name'],
-                        $manner => $result[0][$manner]
+                        'value' => $result[0][$temp1]
                     ];
                 }
 
             }
-            usort($data, function($a, $b) use ($manner) {
-                return $b[$manner] - $a[$manner];
+            usort($data, function($a, $b) {
+                return $b['value'] - $a['value'];
             });
             $rank = 1;
             foreach ($data as &$item) {

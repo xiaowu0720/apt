@@ -101,6 +101,9 @@ Route::get('day30data','data/Data/day30data')->middleware(['UserLoginAuth']);
 //首页展示列表
 Route::get('syzslist','store/Store/listsyzslbt')->middleware(['UserLoginAuth']);
 
+//商品详情
+Route::get('text', 'store/Store/text')->middleware(['UserLoginAuth']);
+
 return [
 
 ];

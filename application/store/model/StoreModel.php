@@ -5,6 +5,7 @@ namespace app\store\model;
 
 
 use app\common\model\Jwt_base;
+use app\data\controller\Data;
 use think\Db;
 use think\Model;
 
@@ -31,6 +32,7 @@ class StoreModel extends Model
         $data = [];
         foreach ($data1 as $temp) {
             $temp1 = [
+                'id'    => $temp['id'],
                 'name'  => $temp['adname'],
                 'desc'  => $temp['addesc'],
                 'money' => $temp['money'],
@@ -98,5 +100,15 @@ class StoreModel extends Model
         ];
         Db::table('mainpage_ad')->insert($data);
         echoJson(1,'设置成功');
+    }
+
+    public function text($id)
+    {
+        $data = Db::table('ad')
+            ->where('id',$id)
+            ->field('id,text,adname,addesc,money,phone,image')
+            ->select();
+
+        echoJson(1, '查询成功', $data[0]);
     }
 }

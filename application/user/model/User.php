@@ -33,12 +33,12 @@ class User extends Model{
         }
     }
     //用户注册
-    public function user_enroll($phone,$password,$code){
-        $redis = init_redis();
-        $temp = $redis->hGet($phone,'code');
-        if($temp != $code){
-            echoJson(0,"验证码错误");
-        }
+    public function user_enroll($phone,$password){
+//        $redis = init_redis();
+//        $temp = $redis->hGet($phone,'code');
+//        if($temp != $code){
+//            echoJson(0,"验证码错误");
+//        }
         $data=Db::table('user')->where('phone',$phone)->select();
         if(!empty($data)){
             echoJson(0,'手机号已被注册');

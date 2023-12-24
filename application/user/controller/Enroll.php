@@ -22,7 +22,7 @@ class Enroll extends Controller{
     public function user_enroll(){
         $phone=$this->info['phone'];
         $password=$this->info['password'];
-        $code = $this->info['code'];
+//        $code = $this->info['code'];
         $data=[
             'phone'=>$phone,
             'password'=>$password
@@ -31,6 +31,7 @@ class Enroll extends Controller{
         if(!$validate->check($data)){
             echoJson(0,$validate->getError());
         }
-        $this->user->user_enroll($phone,$password,$code);
+//        $this->user->user_enroll($phone,$password,$code);
+        $this->user->user_enroll($phone,$password);
     }
 }

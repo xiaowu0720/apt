@@ -25,29 +25,34 @@ class Data extends Controller{
         $this->info = $_GET;
         $site = $this->info['sitename'];
         $redis = init_redis();
-        $data = $redis->get($site);
+        $time = date('H');
+        $data = $redis->hGet('20014617',$time);
+//        if ($data === false) {
+//            $result = array(
+//                'date' => date('Y-m-d'),
+//                'time' => date('H:i:s'),
+//                'temperature' => 0,
+//                'humidity' => 0,
+//                'pm25' => 0,
+//                'pm10' => 0,
+//                'co' => 0,
+//                'co2' => 0,
+//                'aqi' => 0,
+//                'api' => 0,
+//                'primarypollutants' => 0,
+//                'color' => 0
+//            );
+//        } else {
+//            $dataArray = explode(' ', $data);
+//            $keys = array('date', 'time', 'temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
+//            $result = array_combine($keys, $dataArray);
+//        }
+//
+//        echoJson(1, '查询成功', $result);
 
-        if ($data === false) {
-            $result = array(
-                'date' => date('Y-m-d'),
-                'time' => date('H:i:s'),
-                'temperature' => 0,
-                'humidity' => 0,
-                'pm25' => 0,
-                'pm10' => 0,
-                'co' => 0,
-                'co2' => 0,
-                'aqi' => 0,
-                'api' => 0,
-                'primarypollutants' => 0,
-                'color' => 0
-            );
-        } else {
-            $dataArray = explode(' ', $data);
-            $keys = array('date', 'time', 'temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
-            $result = array_combine($keys, $dataArray);
-        }
-
+        $dataArray = explode(' ', $data);
+        $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
+        $result = array_combine($keys, $dataArray);
         echoJson(1, '查询成功', $result);
     }
     //获取昨日数据(城市列表)

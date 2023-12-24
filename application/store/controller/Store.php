@@ -138,4 +138,10 @@ class Store extends Controller
         $id=$this->info['id'];
         $this->store->setsyzsad($id);
     }
+
+    public function text(Request $request)
+    {
+        $id = $request->param('id');
+        $this->store->text($id);
+    }
 }

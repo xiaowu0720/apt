@@ -5,8 +5,7 @@ use think\Validate;
 
 class CodeValidate extends Validate{
     protected $rule = [
-        'email' => 'require|email',
-        'password'=>'require'
+        'email'    => 'require|email',
     ];
 
     protected $message = [
