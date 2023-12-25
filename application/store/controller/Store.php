@@ -51,7 +51,7 @@ class Store extends Controller
             'money'  =>$request->param('money'),//商品价格
             'image'  =>$request->param('image'),//图片地址
             'adname' =>$request->param('adname'),//商品名称
-            'text'   =>$request->param('text');
+            'text'   =>$request->param('text'),
             'cerate' =>date('Y-m-d H:i:s',time()),//添加时间
             'state'  =>'1'//软删除
         ];
@@ -140,9 +140,9 @@ class Store extends Controller
         $this->store->setsyzsad($id);
     }
 
-    public function text(Request $request)
-    {
-        $id = $request->param('id');
-        $this->store->text($id);
-    }
+//    public function text(Request $request)
+//    {
+//        $id = $request->param('id');
+//        $this->store->text($id);
+//    }
 }
