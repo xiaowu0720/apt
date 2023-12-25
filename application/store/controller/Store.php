@@ -51,6 +51,7 @@ class Store extends Controller
             'money'  =>$request->param('money'),//商品价格
             'image'  =>$request->param('image'),//图片地址
             'adname' =>$request->param('adname'),//商品名称
+            'text'   =>$request->param('text');
             'cerate' =>date('Y-m-d H:i:s',time()),//添加时间
             'state'  =>'1'//软删除
         ];
@@ -73,7 +74,7 @@ class Store extends Controller
      */
     public function read($id)
     {
-        //
+        $this->store->text($id);
     }
     /**
      * 保存更新的资源

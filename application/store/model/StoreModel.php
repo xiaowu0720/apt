@@ -102,13 +102,13 @@ class StoreModel extends Model
         echoJson(1,'设置成功');
     }
 
-    public function text($id)
-    {
-        $data = Db::table('ad')
-            ->where('id',$id)
-            ->field('id,text,adname,addesc,money,phone,image')
-            ->select();
-
-        echoJson(1, '查询成功', $data[0]);
-    }
+//    public function text($id)
+//    {
+//        $data = Db::table('ad')
+//            ->where('id',$id)
+//            ->field('id,text,adname,addesc,money,phone,image')
+//            ->select();
+//
+//        echoJson(1, '查询成功', $data);
+//    }
 }
