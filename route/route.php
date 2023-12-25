@@ -104,6 +104,9 @@ Route::get('syzslist','store/Store/listsyzslbt')->middleware(['UserLoginAuth']);
 //商品详情
 Route::get('text', 'store/Store/text')->middleware(['UserLoginAuth']);
 
+//更新用户的信息
+Route::put('user','user/Userput/Userput')->middleware(['UserLoginAuth']);
+
 return [
 
 ];
