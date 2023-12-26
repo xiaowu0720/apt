@@ -24,16 +24,17 @@ Route::resource('popups', 'popups/Popups')->middleware(['Auth']);
 Route::resource('equipment', 'equipment/Devicemg')->middleware(['Auth']);
 Route::resource('city', 'city/City');
 Route::resource('announcement', 'announcement/Announcement')->middleware(['Auth']);
-//删除用户
-Route::delete('user/deluser','user/Deluser/deluser')->middleware(['Auth']);
-//设置用户权限
-Route::put('user/setuser','user/Setuserpermissions/setuserpermissions')->middleware(['Auth']);
-//更新用户状态
-Route::put('user/updateuser','user/Updateuser/updateuser')->middleware(['Auth']);
-//用户列表
-Route::get('user/userlist','user/Userlist/userlist')->middleware(['Auth']);
-//指定用户
-Route::get('user/read', 'user/Userlist/read')->middleware(['Auth']);
+Route::resource('user','user/User')->middleware(['Auth']);
+////删除用户
+//Route::delete('user/deluser','user/Deluser/deluser')->middleware(['Auth']);
+////设置用户权限
+//Route::put('user/setuser','user/Setuserpermissions/setuserpermissions')->middleware(['Auth']);
+////更新用户状态
+//Route::put('user/updateuser','user/Updateuser/updateuser')->middleware(['Auth']);
+////用户列表
+//Route::get('user/userlist','user/Userlist/userlist')->middleware(['Auth']);
+////指定用户
+//Route::get('user/read', 'user/Userlist/read')->middleware(['Auth']);
 //绑定设备
 Route::put('bind','equipment/Devicemg/bindequipent')->middleware(['Auth']);
 //禁用设备
@@ -45,8 +46,6 @@ Route::get('oss', 'aliyun/Getsignature/getOssSignature')->middleware(['Auth']);
 
 //app商店列表
 Route::get('liststore','store/Store/liststore')->middleware(['UserLoginAuth']);
-//用户注册
-Route::post('enroll','user/Enroll/user_enroll');
 //获取验证码
 Route::get('getcode','user/Getcode/getcode');
 //用户登录
@@ -104,8 +103,6 @@ Route::get('syzslist','store/Store/listsyzslbt')->middleware(['UserLoginAuth']);
 //商品详情
 Route::get('text', 'store/Store/text')->middleware(['UserLoginAuth']);
 
-//更新用户的信息
-Route::put('user','user/Userput/Userput')->middleware(['UserLoginAuth']);
 
 return [
 

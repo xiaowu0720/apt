@@ -128,10 +128,10 @@ class User extends Model{
     }
 
     //查询指定用户
-    public function read($username,$name,$phone,$roleld,$state,$email, $page, $count){
+    public function read($username,$name,$phone,$roleId,$state,$email, $page, $count){
         $data = Db::table('user');
         $temp = Db::table('user');
-        if (!empty($username)) {
+        if ($username) {
             $temp = $data->where('username', 'like', '%'.$username.'%');
             $data = $data->where('username', 'like', '%'.$username.'%');
         }
@@ -145,16 +145,11 @@ class User extends Model{
             $temp = $data->where('phone', 'like', '%'.$phone.'%');
             $data = $data->where('phone', 'like', '%'.$phone.'%');
         }
-
-        if (!empty($roleld)) {
-            $results = Db::table('role')->where('name', 'like', '%' . $roleld . '%')->select();
-            foreach ($results as $res) {
-                $data = $data->where('roleId', $res['id']);
-                $temp = $data->where('roleId', $res['id']);
-            }
+        if ($roleId === "0" || !empty($roleId)) {
+            $data = $data->where('roleId', $roleId);
+            $temp = $data->where('roleId', $roleId);
         }
-
-        if (!empty($state)) {
+        if ($state === "0" || !empty($state)) {
             $data = $data->where('state', $state);
             $temp = $data->where('state', $state);
         }
