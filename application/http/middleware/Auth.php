@@ -44,7 +44,7 @@ class Auth
             echoJson(403,'token错误');
         }
 //        $this->check($token, $data);
-        if(!$this->interfaceAuth->check($data['roleId'])){
+        if($this->interfaceAuth->check($data['roleId'])){
             echoJson(0,"权限不足");
         }
         return $next($request);
