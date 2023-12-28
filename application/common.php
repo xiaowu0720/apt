@@ -30,9 +30,9 @@ function echoJson($code,$msg,$result=[],$page=null,$count=10)
 function init_redis()
 {
     $redis = new Redis();
-    $redis->connect('111.230.9.199',6379);
-    $redis->auth("foobared");
-    $redis->select(0);
+    $redis->connect('47.100.110.213',6379);
+    $redis->auth("Mebay20190121");
+    $redis->select(8);
     return $redis;
 }
 
