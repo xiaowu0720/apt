@@ -20,7 +20,8 @@
         "topthink/framework": "5.1.*",
         "firebase/php-jwt": "^6.8",
         "aliyuncs/oss-sdk-php": "^2.6",
-        "topthink/think-captcha": "^2.0"
+        "topthink/think-captcha": "^2.0",
+        "nesbot/carbon": "^2.72"
     },
     "autoload": {
         "psr-4": {

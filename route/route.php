@@ -97,6 +97,8 @@ Route::get('get30data','data/Data/get30data')->middleware(['UserLoginAuth']);
 //获取30日得数据
 Route::get('day30data','data/Data/day30data')->middleware(['UserLoginAuth']);
 
+Route::get('mothdata','data/Data/mothdata');
+
 //首页展示列表
 Route::get('syzslist','store/Store/listsyzslbt')->middleware(['UserLoginAuth']);
 
