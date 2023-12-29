@@ -62,7 +62,7 @@ class Data extends Controller{
     }
     //月度数据
     public function mothdata(Request $request) {
-        $site = $request->param('sitename');
+        $site = getsitename($request->param('id'));
         $start_date = $request->param('start_date');
         $end_date = $request->param('end_date');
 
