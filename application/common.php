@@ -89,3 +89,13 @@ function generateCode($length) {
     return $code;
 }
 
+
+function getsitename($id)
+{
+    $data = \think\Db::table('site')
+        ->where('id', $id)
+        ->select();
+    return $data[0]['name'];
+
+}
+

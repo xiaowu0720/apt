@@ -7,6 +7,7 @@ use app\data\model\Datam;
 use think\App;
 use think\Controller;
 use think\Db;
+use think\Exception;
 use think\Request;
 use Carbon\Carbon;
 
@@ -24,7 +25,7 @@ class Data extends Controller{
     public function getdata()
     {
         $this->info = $_GET;
-        $site = $this->info['sitename'];
+        $site = getsitename($this->info['id']);
         $redis = init_redis();
         $time = date('H');
         $addr = Db::table('equipment')
@@ -183,8 +184,50 @@ class Data extends Controller{
         echoJson(1, '查询成功', $data);
     }
 
+    public function ranking(Request $request) {
+        $manner = $request->param('manner', 'aqi');
+        if (empty($manner)) {
+            $manner = 'aqi';
+        }
+        $result1 = Db::table('equipment')
+            ->where('state','1')
+            ->select();
+        $data = [];
+        $index = 0;
+        foreach ($result1 as $temp) {
+            $redis = init_redis();
+            $time = date('H');
+            $data1 = $redis->hGet($temp['device_address'],$time);
+            $dataArray = explode(' ', $data1);
+            $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
+            $result = array_combine($keys, $dataArray);
+            $data[$index++] = [
+                'site'  => $temp['site'],
+                'field' => $manner,
+                'value' => $result[$manner],
+            ];
+        }
+        usort($data, function ($a, $b) {
+            return $a['value'] - $b['value'];
+        });
+        echoJson(1,'查询成功', $data);
+    }
 
-
-
+    public function calendardata(Request $request)
+    {
+        $site = getsitename($request->param('id'));
+        $date = $request->param('date');
+        try {
+            $date = new \DateTime($date);
+            $date = $date->format('Ym');
+            $data = Db::table($date.'apt')
+                ->field('record_date as date, aqi')
+                ->where('sitename',$site)
+                ->select();
+            echoJson(1,'查询成功', $data);
+        }catch (Exception $e){
+            echoJson(1,'查询成功');
+        }
+    }
 
 }

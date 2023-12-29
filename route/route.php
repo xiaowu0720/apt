@@ -46,6 +46,7 @@ Route::get('oss', 'aliyun/Getsignature/getOssSignature')->middleware(['Auth']);
 
 //app商店列表
 Route::get('liststore','store/Store/liststore')->middleware(['UserLoginAuth']);
+Route::get('ranking', 'data/Data/ranking');
 //获取验证码
 Route::get('getcode','user/Getcode/getcode');
 //用户登录
@@ -59,7 +60,7 @@ Route::get('history','popups/Popups/history')->middleware(['UserLoginAuth']);
 //app城市列表
 Route::get('citylist','city/City/citylist')->middleware(['UserLoginAuth']);
 //日历数据
-Route::get('calendardata','data/Calendar/data')->middleware(['UserLoginAuth']);
+Route::get('calendardata','data/Data/calendardata')->middleware(['UserLoginAuth']);
 //月度排名
 Route::get('ranking', 'data/Monthly/data')->middleware(['UserLoginAuth']);
 //用户信息
