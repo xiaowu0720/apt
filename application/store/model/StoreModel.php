@@ -108,7 +108,10 @@ class StoreModel extends Model
             ->where('id',$id)
             ->field('id,text,adname,addesc,money,phone,image')
             ->select();
+        if (empty($data)) {
+            echoJson(0,'商品不存在');
+        }
 
-        echoJson(1, '查询成功', $data);
+        echoJson(1, '查询成功', $data[0]);
     }
 }
