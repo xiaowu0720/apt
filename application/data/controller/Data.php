@@ -110,22 +110,23 @@ class Data extends Controller{
 
 
         // 处理今年的数据
+        // 处理今年的数据
         foreach ($months as $temp) {
             // 检查表是否存在
             $tableExists = Db::query("SHOW TABLES LIKE '{$temp}'");
 
             if ($tableExists) {
                 $result = Db::table($temp)
-                    ->where('sitename',$site)
+                    ->where('sitename', $site)
                     ->field([
-                        'AVG(temperature) AS temperature',
-                        'AVG(humidity) AS humidity',
-                        'AVG(pm25) AS pm25',
-                        'AVG(pm10) AS pm10',
-                        'AVG(co) AS co',
-                        'AVG(co2) AS co2',
-                        'AVG(aqi) AS aqi',
-                        'AVG(api) AS api',
+                        'CAST(AVG(temperature) AS SIGNED) AS temperature',
+                        'CAST(AVG(humidity) AS SIGNED) AS humidity',
+                        'CAST(AVG(pm25) AS SIGNED) AS pm25',
+                        'CAST(AVG(pm10) AS SIGNED) AS pm10',
+                        'CAST(AVG(co) AS SIGNED) AS co',
+                        'CAST(AVG(co2) AS SIGNED) AS co2',
+                        'CAST(AVG(aqi) AS SIGNED) AS aqi',
+                        'CAST(AVG(api) AS SIGNED) AS api',
                     ])
                     ->find();
                 $sum['pm25'] += $result['pm25'];
@@ -133,10 +134,10 @@ class Data extends Controller{
                 $sum['co'] += $result['co'];
                 $sum['co2'] += $result['co2'];
                 $count++;
-                $data['now'][substr($temp,0,6)] = $result;
+                $data['now'][substr($temp, 0, 6)] = $result;
             } else {
                 // 表不存在，设置默认值为 0
-                $data['now'][substr($temp,0,6)] = [
+                $data['now'][substr($temp, 0, 6)] = [
                     'temperature' => 0,
                     'humidity' => 0,
                     'pm25' => 0,
@@ -148,29 +149,30 @@ class Data extends Controller{
                 ];
             }
         }
-        // 处理上一年的数据
+
+// 处理上一年的数据
         foreach ($lastYearMonths as $temp) {
             // 检查表是否存在
             $tableExists = Db::query("SHOW TABLES LIKE '{$temp}'");
 
             if ($tableExists) {
                 $result = Db::table($temp)
-                    ->where('sitename',$site)
+                    ->where('sitename', $site)
                     ->field([
-                        'AVG(temperature) AS temperature',
-                        'AVG(humidity) AS humidity',
-                        'AVG(pm25) AS pm25',
-                        'AVG(pm10) AS pm10',
-                        'AVG(co) AS co',
-                        'AVG(co2) AS co2',
-                        'AVG(aqi) AS aqi',
-                        'AVG(api) AS api',
+                        'CAST(AVG(temperature) AS SIGNED) AS temperature',
+                        'CAST(AVG(humidity) AS SIGNED) AS humidity',
+                        'CAST(AVG(pm25) AS SIGNED) AS pm25',
+                        'CAST(AVG(pm10) AS SIGNED) AS pm10',
+                        'CAST(AVG(co) AS SIGNED) AS co',
+                        'CAST(AVG(co2) AS SIGNED) AS co2',
+                        'CAST(AVG(aqi) AS SIGNED) AS aqi',
+                        'CAST(AVG(api) AS SIGNED) AS api',
                     ])
                     ->find();
-                $data['last'][substr($temp,0,6)] = $result;
+                $data['last'][substr($temp, 0, 6)] = $result;
             } else {
                 // 表不存在，设置默认值为 0
-                $data['last'][substr($temp,0,6)] = [
+                $data['last'][substr($temp, 0, 6)] = [
                     'temperature' => 0,
                     'humidity' => 0,
                     'pm25' => 0,
@@ -182,15 +184,18 @@ class Data extends Controller{
                 ];
             }
         }
-        $sum['pm25'] /= $count;
-        $sum['pm10'] /= $count;
-        $sum['co'] /= $count;
-        $sum['co2'] /= $count;
+
+        $sum['pm25'] = (int)($sum['pm25'] / $count);
+        $sum['pm10'] = (int)($sum['pm10'] / $count);
+        $sum['co'] = (int)($sum['co'] / $count);
+        $sum['co2'] = (int)($sum['co2'] / $count);
 
         echoJson(1, '查询成功', $data);
+
     }
 
-    public function ranking(Request $request) {
+    public function ranking(Request $request)
+    {
         $manner = $request->param('manner', 'aqi');
         if (empty($manner)) {
             $manner = 'aqi';
@@ -210,7 +215,7 @@ class Data extends Controller{
             $data[$index++] = [
                 'site'  => $temp['site'],
                 'field' => $manner,
-                'value' => $result[$manner],
+                'value' => (int)$result[$manner],
             ];
         }
         usort($data, function ($a, $b) {
@@ -223,16 +228,19 @@ class Data extends Controller{
     {
         $site = getsitename($id);
         $date = $request->param('date');
+
         try {
             $date = new \DateTime($date);
             $date = $date->format('Ym');
+
             $data = Db::table($date.'apt')
-                ->field('record_date as date, aqi')
-                ->where('sitename',$site)
+                ->field('record_date as date, CAST(aqi AS SIGNED) as aqi')
+                ->where('sitename', $site)
                 ->select();
-            echoJson(1,'查询成功', $data);
-        }catch (Exception $e){
-            echoJson(1,'查询成功');
+
+            echoJson(1, '查询成功', $data);
+        } catch (Exception $e) {
+            echoJson(1, '查询成功');
         }
     }
 
