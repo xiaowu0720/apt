@@ -52,7 +52,7 @@ Route::get('getcode','user/Getcode/getcode');
 //用户登录
 Route::post('user/login','user/Login/user_Login');
 //获取实时数据
-Route::get('getdata',"data/Data/getdata")->middleware(['UserLoginAuth']);
+Route::get('getdata/:id','data/Data/getdata')->middleware(['UserLoginAuth']);
 //app获得当日弹窗
 Route::get('getpopups','popups/Popups/getpopups')->middleware(['UserLoginAuth']);
 //app历史弹窗
@@ -60,7 +60,7 @@ Route::get('history','popups/Popups/history')->middleware(['UserLoginAuth']);
 //app城市列表
 Route::get('citylist','city/City/citylist')->middleware(['UserLoginAuth']);
 //日历数据
-Route::get('calendardata','data/Data/calendardata')->middleware(['UserLoginAuth']);
+Route::get('calendardata/:id','data/Data/calendardata')->middleware(['UserLoginAuth']);
 //月度排名
 Route::get('ranking', 'data/Monthly/data')->middleware(['UserLoginAuth']);
 //用户信息
@@ -77,28 +77,8 @@ Route::put('add','collection/Collection/add')->middleware(['UserLoginAuth']);
 Route::get('list','collection/Collection/colist')->middleware(['UserLoginAuth']);
 //获取最近站点
 Route::get('location','data/Data/location')->middleware(['UserLoginAuth']);
-//获取相关城市得所有设备
-Route::get('getxgcssb','equipment/Devicemg/getxgcssb')->middleware(['UserLoginAuth']);
-//城市列表获取本月数据
-Route::get('monthdata','data/Data/monthdata')->middleware(['UserLoginAuth']);
-//城市列表今年数据
-Route::get('yeardata','data/Data/yeardata')->middleware(['UserLoginAuth']);
-//城市列表去年数据
-Route::get('lastYeardata','data/Data/lastYeardata')->middleware(['UserLoginAuth']);
-//城市列表今日数据
-Route::get('today','data/Data/today')->middleware(['UserLoginAuth']);
-//城市列表获取昨日数据
-Route::get('yesterdaydata','data/Data/yesterdaydata')->middleware(['UserLoginAuth']);
-//获取24小时数据
-Route::get('get24data','data/Data/get24data')->middleware(['UserLoginAuth']);
-//获取72小时数据
-Route::get('get72data','data/Data/get72data')->middleware(['UserLoginAuth']);
-//30日的数据
-Route::get('get30data','data/Data/get30data')->middleware(['UserLoginAuth']);
-//获取30日得数据
-Route::get('day30data','data/Data/day30data')->middleware(['UserLoginAuth']);
-
-Route::get('mothdata','data/Data/mothdata');
+//月度分析
+Route::get('mothdata/:id','data/Data/mothdata');
 
 //首页展示列表
 Route::get('syzslist','store/Store/listsyzslbt')->middleware(['UserLoginAuth']);

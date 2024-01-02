@@ -22,20 +22,26 @@ class Data extends Controller{
     }
 
     //获取实时数据
-    public function getdata()
+    public function getdata(Request $request, $id)
     {
-        $this->info = $_GET;
-        $site = getsitename($this->info['id']);
+        $site = getsitename($id);
         $redis = init_redis();
         $time = date('H');
         $addr = Db::table('equipment')
-            ->where('site',$site)
+            ->where('site', $site)
             ->field('device_address')
             ->select();
-        $data = $redis->hGet($addr[0]['device_address'],$time);
+        $data = $redis->hGet($addr[0]['device_address'], $time);
         $dataArray = explode(' ', $data);
+
+        // 自定义四舍五入函数
+        $roundingFunction = function ($value) {
+            return round($value);
+        };
+
         $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
-        $result = array_combine($keys, $dataArray);
+        $result = array_combine($keys, array_map($roundingFunction, $dataArray));
+
         echoJson(1, '查询成功', $result);
     }
     //获取站点最近位置
@@ -61,8 +67,8 @@ class Data extends Controller{
         echoJson(1,'',$data);
     }
     //月度数据
-    public function mothdata(Request $request) {
-        $site = getsitename($request->param('id'));
+    public function mothdata(Request $request, $id) {
+        $site = getsitename($id);
         $start_date = $request->param('start_date');
         $end_date = $request->param('end_date');
 
@@ -213,9 +219,9 @@ class Data extends Controller{
         echoJson(1,'查询成功', $data);
     }
 
-    public function calendardata(Request $request)
+    public function calendardata(Request $request, $id)
     {
-        $site = getsitename($request->param('id'));
+        $site = getsitename($id);
         $date = $request->param('date');
         try {
             $date = new \DateTime($date);
