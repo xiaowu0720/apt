@@ -67,181 +67,107 @@ class Data extends Controller{
         echoJson(1,'',$data);
     }
     //月度数据
-    public function mothdata(Request $request, $id) {
+    public function mothdata(Request $request, $id)
+    {
         $site = getsitename($id);
         $start_date = $request->param('start_date');
         $end_date = $request->param('end_date');
 
-        // 使用 Carbon 类创建开始和结束日期对象
-        $startDate = Carbon::parse($start_date);
-        $endDate = Carbon::parse($end_date);
-
-        // 获取上一年的开始和结束日期，但月份保持一致
-        $lastYearStartDate = $startDate->copy()->subYear();
-        $lastYearEndDate = $endDate->copy()->subYear();
-        $startDate->subMonth();
-
-
-        // 初始化月份数组
-        $months = [];
-
-        // 循环生成每个月的日期范围
-        while ($startDate->lte($endDate)) {
-            $months[] = $startDate->format('Ym').'apt';
-            $startDate->addMonth(); // 移动到下一个月
-        }
-
-        // 初始化上一年的月份数组
-        $lastYearMonths = [];
-
-        // 循环生成上一年每个月的日期范围， starting from the current month of last year
-        while ($lastYearStartDate->lte($lastYearEndDate)) {
-            $lastYearMonths[] = $lastYearStartDate->format('Ym').'apt';
-            $lastYearStartDate->addMonth(); // 移动到下一个月
-        }
-
-        $data = [];
-        $sum = [];
-        $sum['pm25'] = 0;
-        $sum['pm10'] = 0;
-        $sum['co'] = 0;
-        $sum['co2'] = 0;
-        $count = 0;
-
-
-        // 处理今年的数据
-        // 处理今年的数据
-        foreach ($months as $temp) {
-            // 检查表是否存在
-            $tableExists = Db::query("SHOW TABLES LIKE '{$temp}'");
-
-            if ($tableExists) {
-                $result = Db::table($temp)
-                    ->where('sitename', $site)
-                    ->field([
-                        'CAST(AVG(temperature) AS SIGNED) AS temperature',
-                        'CAST(AVG(humidity) AS SIGNED) AS humidity',
-                        'CAST(AVG(pm25) AS SIGNED) AS pm25',
-                        'CAST(AVG(pm10) AS SIGNED) AS pm10',
-                        'CAST(AVG(co) AS SIGNED) AS co',
-                        'CAST(AVG(co2) AS SIGNED) AS co2',
-                        'CAST(AVG(aqi) AS SIGNED) AS aqi',
-                        'CAST(AVG(api) AS SIGNED) AS api',
-                    ])
-                    ->find();
-                $sum['pm25'] += $result['pm25'];
-                $sum['pm10'] += $result['pm10'];
-                $sum['co'] += $result['co'];
-                $sum['co2'] += $result['co2'];
-                $count++;
-                $data['now'][substr($temp, 0, 6)] = $result;
-            } else {
-                // 表不存在，设置默认值为 0
-                $data['now'][substr($temp, 0, 6)] = [
-                    'temperature' => 0,
-                    'humidity' => 0,
-                    'pm25' => 0,
-                    'pm10' => 0,
-                    'co' => 0,
-                    'co2' => 0,
-                    'aqi' => 0,
-                    'api' => 0,
-                ];
-            }
-        }
-
-// 处理上一年的数据
-        foreach ($lastYearMonths as $temp) {
-            // 检查表是否存在
-            $tableExists = Db::query("SHOW TABLES LIKE '{$temp}'");
-
-            if ($tableExists) {
-                $result = Db::table($temp)
-                    ->where('sitename', $site)
-                    ->field([
-                        'CAST(AVG(temperature) AS SIGNED) AS temperature',
-                        'CAST(AVG(humidity) AS SIGNED) AS humidity',
-                        'CAST(AVG(pm25) AS SIGNED) AS pm25',
-                        'CAST(AVG(pm10) AS SIGNED) AS pm10',
-                        'CAST(AVG(co) AS SIGNED) AS co',
-                        'CAST(AVG(co2) AS SIGNED) AS co2',
-                        'CAST(AVG(aqi) AS SIGNED) AS aqi',
-                        'CAST(AVG(api) AS SIGNED) AS api',
-                    ])
-                    ->find();
-                $data['last'][substr($temp, 0, 6)] = $result;
-            } else {
-                // 表不存在，设置默认值为 0
-                $data['last'][substr($temp, 0, 6)] = [
-                    'temperature' => 0,
-                    'humidity' => 0,
-                    'pm25' => 0,
-                    'pm10' => 0,
-                    'co' => 0,
-                    'co2' => 0,
-                    'aqi' => 0,
-                    'api' => 0,
-                ];
-            }
-        }
-
-        $sum['pm25'] = (int)($sum['pm25'] / $count);
-        $sum['pm10'] = (int)($sum['pm10'] / $count);
-        $sum['co'] = (int)($sum['co'] / $count);
-        $sum['co2'] = (int)($sum['co2'] / $count);
-
-        echoJson(1, '查询成功', $data);
+        $this->data->monthdata($site, $start_date, $end_date);
 
     }
 
     public function ranking(Request $request)
     {
         $manner = $request->param('manner', 'aqi');
-        if (empty($manner)) {
-            $manner = 'aqi';
-        }
-        $result1 = Db::table('equipment')
-            ->where('state','1')
-            ->select();
-        $data = [];
-        $index = 0;
-        foreach ($result1 as $temp) {
-            $redis = init_redis();
-            $time = date('H');
-            $data1 = $redis->hGet($temp['device_address'],$time);
-            $dataArray = explode(' ', $data1);
-            $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
-            $result = array_combine($keys, $dataArray);
-            $data[$index++] = [
-                'site'  => $temp['site'],
-                'field' => $manner,
-                'value' => (int)$result[$manner],
-            ];
-        }
-        usort($data, function ($a, $b) {
-            return $a['value'] - $b['value'];
-        });
-        echoJson(1,'查询成功', $data);
+        $this->data->ranking($manner);
     }
 
     public function calendardata(Request $request, $id)
     {
         $site = getsitename($id);
         $date = $request->param('date');
+        $this->data->calendardata($site,$date);
+    }
 
-        try {
-            $date = new \DateTime($date);
-            $date = $date->format('Ym');
+    public function yeardata(Request $request, $id)
+    {
+        $year = $request->param('year');
+        $site = getsitename($id);
+        $data = [];
+        $data1 = [];
 
-            $data = Db::table($date.'apt')
-                ->field('record_date as date, CAST(aqi AS SIGNED) as aqi')
-                ->where('sitename', $site)
-                ->select();
+        for ($month = 1; $month <= 12; $month++) {
+            $formattedMonth = sprintf("%02d", $month);
+            $tname = $year . $formattedMonth;
+            try {
+                $result = Db::table($tname.'apt')
+                    ->where('sitename', $site)
+                    ->field('max(pm25) as pm25, max(pm10) as pm10, max(co) as co, max(co2) as co2, avg(pm25) as avg_pm25, avg(pm10) as avg_pm10, avg(co) as avg_co, avg(co2) as avg_co2')
+                    ->select();
+                $result1 = Db::table($tname.'apt')
+                    ->where('sitename', $site)
+                    ->field('aqi')
+                    ->select();
+                $data1[$month] = $result1;
+                foreach ($result as &$row) {
+                    foreach ($row as $key => &$value) {
+                        $value = intval($value);
+                    }
+                }
 
-            echoJson(1, '查询成功', $data);
-        } catch (Exception $e) {
-            echoJson(1, '查询成功');
+                $data[$month] = $result[0];
+            } catch (Exception $e) {
+                $data[$month] = [
+                    'pm25'     => 0,
+                    'pm10'     => 0,
+                    'co'       => 0,
+                    'co2'      => 0,
+                    'avg_pm25' => 0,
+                    'avg_pm10' => 0,
+                    'avg_co'   => 0,
+                    'avg_co2'  => 0
+                ];
+            }
         }
+        $sum_pm25 = 0;
+        $sum_pm10 = 0;
+        $sum_co = 0;
+        $sum_co2 = 0;
+        foreach ($data as $temp) {
+            $sum_pm25 += $temp['avg_pm25'];
+            $sum_pm10 += $temp['avg_pm10'];
+            $sum_co += $temp['avg_co'];
+            $sum_co2 += $temp['avg_co2'];
+        }
+        $data['sum_pm25'] = (int)$sum_pm25;
+        $data['sum_pm10'] = (int)$sum_pm10;
+        $data['sum_co'] = (int)$sum_co;
+        $data['sum_co2'] = (int)$sum_co2;
+        $data['01'] = 0;
+        $data['02'] = 0;
+        $data['03'] = 0;
+        $data['04'] = 0;
+        $data['05'] = 0;
+        $data['06'] = 0;
+        foreach ($data1 as $temp) {
+            foreach ($temp as $temp1) {
+                if ($temp1['aqi'] <= 50) {
+                    $data['01']++;
+                }elseif ($temp1['aqi'] <= 100) {
+                    $data['02']++;
+                }elseif ($temp1['aqi'] <= 150) {
+                    $data['03']++;
+                }elseif ($temp1['aqi'] <= 200) {
+                    $data['04']++;
+                }elseif ($temp1['aqi'] <= 300) {
+                    $data['05']++;
+                }else {
+                    $data['06']++;
+                }
+            }
+        }
+        echoJson(1,'查询成功',$data);
     }
 
 }

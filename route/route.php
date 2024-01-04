@@ -79,7 +79,8 @@ Route::get('list','collection/Collection/colist')->middleware(['UserLoginAuth'])
 Route::get('location','data/Data/location')->middleware(['UserLoginAuth']);
 //月度分析
 Route::get('mothdata/:id','data/Data/mothdata');
-
+//年度分析
+Route::get('yeardata/:id', 'data/Data/yeardata');
 //首页展示列表
 Route::get('syzslist','store/Store/listsyzslbt')->middleware(['UserLoginAuth']);
 
