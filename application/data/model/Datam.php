@@ -118,12 +118,25 @@ class Datam extends Model
                         'CAST(AVG(api) AS SIGNED) AS api',
                     ])
                     ->find();
-                $sum['pm25'] += $result['pm25'];
-                $sum['pm10'] += $result['pm10'];
-                $sum['co'] += $result['co'];
-                $sum['co2'] += $result['co2'];
-                $count++;
-                $data['now'][substr($temp, 0, 6)] = $result;
+                if ($result['temperature'] == Null){
+                    $data['now'][substr($temp, 0, 6)] = [
+                        'temperature' => 0,
+                        'humidity' => 0,
+                        'pm25' => 0,
+                        'pm10' => 0,
+                        'co' => 0,
+                        'co2' => 0,
+                        'aqi' => 0,
+                        'api' => 0,
+                    ];
+                }else{
+                    $sum['pm25'] += $result['pm25'];
+                    $sum['pm10'] += $result['pm10'];
+                    $sum['co'] += $result['co'];
+                    $sum['co2'] += $result['co2'];
+                    $count++;
+                    $data['now'][substr($temp, 0, 6)] = $result;
+                }
             } else {
                 // 表不存在，设置默认值为 0
                 $data['now'][substr($temp, 0, 6)] = [
@@ -159,7 +172,20 @@ class Datam extends Model
                         'CAST(AVG(api) AS SIGNED) AS api',
                     ])
                     ->find();
-                $data['last'][substr($temp, 0, 6)] = $result;
+                if ($result['temperature'] == Null){
+                    $data['last'][substr($temp, 0, 6)] = [
+                        'temperature' => 0,
+                        'humidity' => 0,
+                        'pm25' => 0,
+                        'pm10' => 0,
+                        'co' => 0,
+                        'co2' => 0,
+                        'aqi' => 0,
+                        'api' => 0,
+                    ];
+                }else{
+                    $data['last'][substr($temp, 0, 6)] = $result;
+                }
             } else {
                 // 表不存在，设置默认值为 0
                 $data['last'][substr($temp, 0, 6)] = [

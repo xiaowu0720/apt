@@ -34,13 +34,21 @@ class Data extends Controller{
         $data = $redis->hGet($addr[0]['device_address'], $time);
         $dataArray = explode(' ', $data);
 
-        // 自定义四舍五入函数
+        // Define the rounding function
         $roundingFunction = function ($value) {
             return round($value);
         };
 
+        // Exclude the last two values from rounding
+        $roundingExcludeLastTwo = function ($key, $value) use ($roundingFunction, $dataArray) {
+            if ($key < count($dataArray) - 2) {
+                return $roundingFunction($value);
+            }
+            return $value;
+        };
+
         $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
-        $result = array_combine($keys, array_map($roundingFunction, $dataArray));
+        $result = array_combine($keys, array_map($roundingExcludeLastTwo, array_keys($dataArray), $dataArray));
 
         echoJson(1, '查询成功', $result);
     }
