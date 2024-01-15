@@ -61,6 +61,12 @@ class Equipment extends Model
     }
 
     public function addequipment($device_address,$equipmentname,$site){
+        if (!empty($site)){
+            $temp = Db::table('equipment')->where('site', $site)->select();
+            if (!empty($temp)) {
+                echoJson(0,'站点已被绑定');
+            }
+        }
         $count=Db::table('equipment')->count();
         $data=[
             'id'             => $count+1,
@@ -102,6 +108,10 @@ class Equipment extends Model
         }
 
         if (!empty($site)) {
+            $temp = Db::table('equipment')->where('site', $site)->select();
+            if (!empty($temp) && $temp[0]['id'] != $id) {
+                echoJson(0,'站点已被绑定');
+            }
             $data['site'] = $site;
         }
         Db::table('equipment')->where('id', $id)->update($data);
