@@ -88,7 +88,7 @@ class SiteModel extends Model
         $rel = Db::table('site')
             ->where('name', $data['name'])
             ->select();
-        if(!empty($rel)){
+        if(!empty($rel) && $rel[0]['name'] != $data['name']){
             echoJson(0,'已经存在该站点名称');
         }
         Db::table('site')->where('id',$id)->update($data);

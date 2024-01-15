@@ -19,16 +19,6 @@ class Popups extends Controller
         $this->popups = new Popupsmodel();
         parent::__construct($app);
     }
-
-    public function getpopups()
-    {
-        $currentDate = date('Y-m-d'); // 获取当前日期，格式为 "YYYY-MM-DD"
-        $data = Db::table('send_message')
-            ->where('start_date', '>=',$currentDate)
-            ->where('end_date', '<=',$currentDate)
-            ->select();
-        echoJson(1, '', $data);
-    }
     /**
      * 显示资源列表
      *
@@ -36,6 +26,7 @@ class Popups extends Controller
      */
     public function index(Request $request)
     {
+//        $action = $request->param('action', );
         $page = $request->param('page',1);
         $count = $request->param('count',10);
 
