@@ -85,6 +85,12 @@ class SiteModel extends Model
 
     public function siteupdate($id, $data)
     {
+        $rel = Db::table('site')
+            ->where('name', $data['name'])
+            ->select();
+        if(!empty($rel)){
+            echoJson(0,'已经存在该站点名称');
+        }
         Db::table('site')->where('id',$id)->update($data);
         echoJson(1,'更新成功');
     }
