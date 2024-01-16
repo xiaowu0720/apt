@@ -47,22 +47,9 @@ class Equipment extends Model
         echoJson(1,'查询成功',$data,$page,$count);
     }
 
-    public function bindequipent($id, $site)
-    {
-        $reu=Db::table('site')->where('name',$site)->select();
-        if(empty($reu)){
-            echoJson(0,'请先添加站点');
-        }
-        $data=[
-            'site' => $site
-        ];
-        Db::table('equipment')->where('id',$id)->update($data);
-        echoJson(1,'绑定成功');
-    }
-
     public function addequipment($device_address,$equipmentname,$site){
         if (!empty($site)){
-            $temp = Db::table('equipment')->where('site', $site)->select();
+            $temp = Db::table('equipment')->where('sid', $site)->select();
             if (!empty($temp)) {
                 echoJson(0,'站点已被绑定');
             }
@@ -74,7 +61,7 @@ class Equipment extends Model
             'state'          => '1',
             'equipmentname'  => $equipmentname,
             'date'           => date('Y-m-d H:i:s'),
-            'site'           => $site
+            'sid'           => $site
         ];
         $validate=new Vequipment();
         if(!$validate->check($data)){
@@ -108,11 +95,11 @@ class Equipment extends Model
         }
 
         if (!empty($site)) {
-            $temp = Db::table('equipment')->where('site', $site)->select();
+            $temp = Db::table('equipment')->where('sid', $site)->select();
             if (!empty($temp) && $temp[0]['id'] != $id) {
                 echoJson(0,'站点已被绑定');
             }
-            $data['site'] = $site;
+            $data['sid'] = $site;
         }
         Db::table('equipment')->where('id', $id)->update($data);
 

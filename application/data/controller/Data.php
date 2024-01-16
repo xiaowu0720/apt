@@ -24,13 +24,15 @@ class Data extends Controller{
     //获取实时数据
     public function getdata(Request $request, $id)
     {
-        $site = getsitename($id);
         $redis = init_redis();
         $time = date('H');
         $addr = Db::table('equipment')
-            ->where('site', $site)
+            ->where('sid', $id)
             ->field('device_address')
             ->select();
+        if (empty($addr)) {
+            echoJson(0,'不存在该站点');
+        }
         $data = $redis->hGet($addr[0]['device_address'], $time);
         $dataArray = explode(' ', $data);
 
@@ -77,7 +79,7 @@ class Data extends Controller{
     //月度数据
     public function mothdata(Request $request, $id)
     {
-        $site = getsitename($id);
+        $site = getdevice_address($id);
         $start_date = $request->param('start_date');
         $end_date = $request->param('end_date');
 
@@ -93,9 +95,8 @@ class Data extends Controller{
 
     public function calendardata(Request $request, $id)
     {
-        $site = getsitename($id);
         $date = $request->param('date');
-        $this->data->calendardata($site,$date);
+        $this->data->calendardata($id,$date);
     }
 
     public function yeardata(Request $request, $id)

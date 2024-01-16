@@ -16,13 +16,14 @@ class Datam extends Model
     }
 
     public function  calendardata($site, $date) {
+        echo getdevice_address($site);
         try {
             $date = new \DateTime($date);
             $date = $date->format('Ym');
 
             $data = Db::table($date.'apt')
                 ->field('record_date as date, CAST(aqi AS SIGNED) as aqi')
-                ->where('sitename', $site)
+                ->where('device_address', getdevice_address($site))
                 ->select();
 
             echoJson(1, '查询成功', $data);
@@ -48,7 +49,7 @@ class Datam extends Model
             $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
             $result = array_combine($keys, $dataArray);
             $data[$index++] = [
-                'site'  => $temp['site'],
+                'site'  => getsitename($temp['sid']),
                 'field' => $manner,
                 'value' => (int)$result[$manner],
             ];
@@ -106,7 +107,7 @@ class Datam extends Model
 
             if ($tableExists) {
                 $result = Db::table($temp)
-                    ->where('sitename', $site)
+                    ->where('device_address', $site)
                     ->field([
                         'CAST(AVG(temperature) AS SIGNED) AS temperature',
                         'CAST(AVG(humidity) AS SIGNED) AS humidity',
@@ -160,7 +161,7 @@ class Datam extends Model
 
             if ($tableExists) {
                 $result = Db::table($temp)
-                    ->where('sitename', $site)
+                    ->where('device_address', $site)
                     ->field([
                         'CAST(AVG(temperature) AS SIGNED) AS temperature',
                         'CAST(AVG(humidity) AS SIGNED) AS humidity',

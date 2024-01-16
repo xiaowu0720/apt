@@ -99,3 +99,11 @@ function getsitename($id)
 
 }
 
+function getdevice_address($id)
+{
+    $data = \think\Db::table('equipment')
+        ->where('sid', $id)
+        ->select();
+    return $data[0]['device_address'];
+}
+

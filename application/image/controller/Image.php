@@ -27,7 +27,7 @@ class Image extends Controller
 
         $data = Db::table('image')->page($page, $count)->select();
 
-        echoJson(1, '查询成功', $data);
+        echoJson(1, '查询成功', $data, $page, sizeof($data));
     }
     /**
      * 保存新建的资源

@@ -33,7 +33,6 @@ class Devicemg extends Controller
         if (empty($count)) {
             $count = 10;
         }
-
         $data = Db::table('equipment')->page($page, $count)->select();
 
         echoJson(1,'查询成功',$data,$page,count($data));
@@ -50,8 +49,8 @@ class Devicemg extends Controller
     {
         $device_address = $request->param('device_address');
         $equipmentname = $request->param('equipmentname');
-        $site = $request->param('site', null);
-        $this->equip->addequipment($device_address,$equipmentname, $site);
+        $sid = $request->param('sid', null);
+        $this->equip->addequipment($device_address,$equipmentname, $sid);
     }
 
     /**
@@ -74,10 +73,10 @@ class Devicemg extends Controller
         $state = $request->param('state', null);
         $equipmentname = $request->param('equipmentname', null);
         $device_address = $request->param('device_address', null);
-        $site = $request->param('site', null);
+        $sid = $request->param('sid', null);
         $page = $request->param('page', 1);
         $count = $request->param('count', 10);
-        $this->equip->listequipment($state, $device_address, $equipmentname, $site, $page, $count);
+        $this->equip->listequipment($state, $device_address, $equipmentname, $sid, $page, $count);
     }
 
 
@@ -92,10 +91,10 @@ class Devicemg extends Controller
     {
         $equipmentname = $request->param('equipmentname', null);
         $device_address = $request->param('device_address', null);
-        $site = $request->param('site', null);
+        $sid = $request->param('sid', null);
         $state = $request->param('state', null);
 
-        $this->equip->updateequ($id,$equipmentname, $device_address, $site, $state);
+        $this->equip->updateequ($id,$equipmentname, $device_address, $sid, $state);
     }
 
     /**

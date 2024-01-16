@@ -130,7 +130,7 @@ class User extends Controller
         if (!empty($phone)) {
             $data['phone'] = $phone;
             $temp = Db::table('user')->where('phone',$phone)->select();
-            if (!empty($phone)) {
+            if (!empty($temp) && $temp[0]['id'] != $id) {
                 echoJson(0,'该手机号已被注册');
             }
         }
