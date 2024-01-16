@@ -126,23 +126,4 @@ class Store extends Controller
     {
         $this->store->delstore($id);
     }
-
-    //首页展示列表
-    public function listsyzslbt(){
-        $data=Db::table('mainpage_ad')->select();
-        echoJson(1,'查询成功',$data);
-    }
-
-    //设置首页展示广告
-    public function setsyzslbt(){
-        $this->info=$_REQUEST;
-        $id=$this->info['id'];
-        $this->store->setsyzsad($id);
-    }
-
-//    public function text(Request $request)
-//    {
-//        $id = $request->param('id');
-//        $this->store->text($id);
-//    }
 }

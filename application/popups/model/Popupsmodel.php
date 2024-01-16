@@ -9,11 +9,15 @@ use think\Model;
 
 class Popupsmodel extends Model
 {
-    public function popindex($page, $count)
+    public function popindex($page, $count, $action)
     {
-        $data = Db::table('send_message')->page($page, $count)->select();
-        $count = Db::table('send_message')->count();
-
+        if ($action == 'setup') {
+            $data = Db::table('send_message')->page($page, $count)->select();
+            $count = Db::table('send_message')->count();
+        }else {
+            $data = Db::table('popup')->page($page, $count)->select();
+            $count = Db::table('popup')->count();
+        }
         echoJson(1, '查询成功', $data, $page, $count);
     }
 

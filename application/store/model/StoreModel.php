@@ -81,26 +81,6 @@ class StoreModel extends Model
         echoJson(1,'更新成功');
     }
 
-    public function setsyzsad($id){
-        $rule=Db::table('ad')->where('id',$id)->select();
-        if($rule[0]['sfsyzs']==1){
-            echoJson(0,'该广告已是首页展示');
-        }
-        $data=[
-            'sfsyzs'=>'1'
-        ];
-        Db::table('ad')->where('id',$id)->update($data);
-        $temp=Db::table('ad')->where('id',$id)->select();
-        $count=Db::table('mainpage_ad')->count();
-        $data=[
-            'id'=>$count+1,
-            'adname'=>$temp[0]['adname'],
-            'image'=>$temp[0]['image'],
-            'zssx'=>$count+1
-        ];
-        Db::table('mainpage_ad')->insert($data);
-        echoJson(1,'设置成功');
-    }
 
     public function text($id)
     {

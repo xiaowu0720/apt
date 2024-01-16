@@ -12,7 +12,7 @@ use think\Db;
 use think\Request;
 use think\Route;
 
-class Collection extends Controller
+class Collection extends Controller //收藏
 {
     public $jwt;
     public $coll;
@@ -25,10 +25,9 @@ class Collection extends Controller
 
     public function sitelist(Request $request)
     {
-          $id = $request->param('id');
+        $id = $request->param('id');
         $province = $request->param('province');
         $county = $request->param('county');
-
         $this->coll->sitelist($id,$province, $county);
     }
 

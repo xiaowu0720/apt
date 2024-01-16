@@ -34,7 +34,7 @@ class Devicemg extends Controller
             $count = 10;
         }
 
-        $data = Db::table('equipment')->select();
+        $data = Db::table('equipment')->page($page, $count)->select();
 
         echoJson(1,'查询成功',$data,$page,count($data));
     }

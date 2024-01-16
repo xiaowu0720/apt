@@ -26,7 +26,7 @@ class Popups extends Controller
      */
     public function index(Request $request)
     {
-//        $action = $request->param('action', );
+        $action = $request->param('action', 'setup');
         $page = $request->param('page',1);
         $count = $request->param('count',10);
 
@@ -37,7 +37,7 @@ class Popups extends Controller
             $count = 10;
         }
 
-        $this->popups->popindex($page, $count);
+        $this->popups->popindex($page, $count, $action);
     }
 
 
@@ -49,39 +49,7 @@ class Popups extends Controller
      */
     public function save(Request $request)
     {
-        $start_date = $request->param('start_date', null);
-        $end_date = $request->param('end_date', null);
-        $content = $request->param('content', null);
-        $title = $request->param('title', null);
-        $image = $request->param('image', null);
 
-        // 检查开始时间是否小于结束时间
-        if (!empty($start_date) && !empty($end_date)) {
-            $startDateTime = new DateTime($start_date);
-            $endDateTime = new DateTime($end_date);
-
-            if ($startDateTime >= $endDateTime) {
-                echoJson(0, '开始时间必须小于结束时间');
-                return;
-            }
-        }
-
-        $data = [
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'content' => $content,
-            'title' => $title,
-            'image' => $image
-        ];
-
-        $validate = new Popupsv();
-        if (!$validate->check($data)) {
-            echoJson(0, $validate->getError());
-            return;
-        }
-
-        $this->popups->addpop($data);
-        // 如果以上条件都满足，执行保存逻辑
     }
 
     /**
@@ -92,68 +60,11 @@ class Popups extends Controller
      */
     public function read($id, Request $request)
     {
-        $id = strtolower($id);
-        if($id != 'null') {
-            $data = Db::table('send_message')
-                ->where('id', $id)
-                ->select();
-
-            echoJson(1,'查询成功',$data,1,1);
-        }
-        $year = $request->param('year',null);
-        $month = $request->param('month',null);
-        $day = $request->param('day',null);
-        $title = $request->param('title',null);
-        $page = $request->param('page',1);
-        $count = $request->param('count',10);
-
-
-        $data = Db::table('send_message');
-        $temp = Db::table('send_message');
-
-        if (!empty($year)) {
-            $data = $data->where('start_date','like',$year.'%')
-                ->whereOr('end_date','like',$year.'%');
-            $temp = $data->where('start_date','like',$year.'%')
-                ->whereOr('end_date','like',$year.'%');
-        }
-
-        if (!empty($month)) {
-            if ($month) {
-                $month = str_pad($month, 2, '0', STR_PAD_LEFT);
-
-            }
-            $data = $data->where('start_date','like','_____'.$month.'___')
-                ->whereOr('end_date','like','_____'.$month.'___');
-            $temp = $data->where('start_date','like','_____'.$month.'___')
-                ->whereOr('end_date','like','_____'.$month.'___');
-        }
-
-        if (!empty($day)) {
-            if ($day) {
-                $day = str_pad($day, 2,'0',STR_PAD_LEFT);
-            }
-            $data = $data->where('start_date','like','________'.$day)
-                ->whereOr('end_date','like','________'.$day);
-            $temp = $data->where('start_date','like','________'.$day)
-                ->whereOr('end_date','like','________'.$day);
-        }
-
-        if (!empty($title)) {
-            $data = $data->where('title','like','%'.$title.'%');
-            $temp = $data->where('title','like','%'.$title.'%');
-
-        }
-
-        $data = $data
-            ->page($page,$count)
+        $data = Db::table('popup')
+            ->where('id', $id)
             ->select();
 
-        $temp = $temp
-            ->select();
-
-        echoJson(1,'查询成功',$data, $page,count($temp));
-
+        echoJson(1,'查询成功',$data,1,1);
     }
 
     /**
@@ -166,43 +77,6 @@ class Popups extends Controller
     public function update(Request $request, $id)
     {
 
-        $currentDate = new DateTime();
-        $currentDate->setTime(0, 0, 0);
-
-        $date = $request->param('end_date', null);
-
-        if (!empty($date)) {
-            $givenDate = new DateTime($date);
-            $givenDate->setTime(0, 0, 0);
-
-            if ($givenDate < $currentDate) {
-                echoJson(0, '更新的时间必须大于等于当前时间');
-            }
-
-            $data['end_date'] = $date;
-        }
-
-
-        $content = $request->param('content', null);
-
-        if(!empty($content)) {
-            $data['content'] = $content;
-        }
-
-        $title = $request->param('title', null);
-
-        if (!empty($title)) {
-            $data['title'] = $title;
-        }
-
-        $image = $request->param('image', null);
-
-        if (!empty($image)) {
-            $data['image'] = $image;
-        }
-
-        Db::table('send_message')->where('id', $id)->update($data);
-        echoJson(1,'更新成功');
     }
 
     /**
@@ -213,33 +87,8 @@ class Popups extends Controller
      */
     public function delete($id)
     {
-        Db::table('send_message')->where('id',$id)->delete();
-        Db::table('send_message')->where('id', '>', $id)->setDec('id');
+        Db::table('popup')->where('id',$id)->delete();
         echoJson(1,'删除成功');
     }
 
-    public function history(Request $request)
-    {
-        $date = $request->param('date', null);
-        $title = $request->param('title',null);
-        $currentDate = date('Y-m-d'); // 获取当前日期
-
-        $data = Db::table('send_message')
-            ->where('start_date','<=',$currentDate);
-
-
-        if (!empty($date)) {
-            $data = $data->whereColumn($date, '>=', 'start_date')
-                ->whereColumn($date, '<=', 'end_date');;
-        }
-
-
-        if (!empty($title)) {
-            $data = $data->where('title','like','%'.$title.'%');
-        }
-
-        $data = $data->select();
-
-        echoJson(1,'查询成功',$data);
-    }
 }

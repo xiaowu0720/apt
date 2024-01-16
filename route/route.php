@@ -25,6 +25,7 @@ Route::resource('equipment', 'equipment/Devicemg')->middleware(['Auth']);
 Route::resource('city', 'city/City');
 Route::resource('announcement', 'announcement/Announcement')->middleware(['Auth']);
 Route::resource('user','user/User')->middleware(['Auth']);
+Route::resource('image','image/Image')->middleware(['Auth']);
 ////删除用户
 //Route::delete('user/deluser','user/Deluser/deluser')->middleware(['Auth']);
 ////设置用户权限
