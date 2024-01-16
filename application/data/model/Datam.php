@@ -201,10 +201,17 @@ class Datam extends Model
             }
         }
 
-        $sum['pm25'] = (int)($sum['pm25'] / $count);
-        $sum['pm10'] = (int)($sum['pm10'] / $count);
-        $sum['co'] = (int)($sum['co'] / $count);
-        $sum['co2'] = (int)($sum['co2'] / $count);
+        if ($count != 0) {
+            $sum['pm25'] = (int)($sum['pm25'] / $count);
+            $sum['pm10'] = (int)($sum['pm10'] / $count);
+            $sum['co'] = (int)($sum['co'] / $count);
+            $sum['co2'] = (int)($sum['co2'] / $count);
+        } else {
+            $sum['pm25'] = (int)$sum['pm25'];
+            $sum['pm10'] = (int)$sum['pm10'];
+            $sum['co'] = (int)$sum['co'];
+            $sum['co2'] = (int)$sum['co2'];
+        }
 
         echoJson(1, '查询成功', $data);
     }
