@@ -94,13 +94,11 @@ class Equipment extends Model
             $data['device_address'] = $device_address;
         }
 
-        if (!empty($site)) {
-            $temp = Db::table('equipment')->where('sid', $site)->select();
-            if (!empty($temp) && $temp[0]['id'] != $id) {
-                echoJson(0,'站点已被绑定');
-            }
-            $data['sid'] = $site;
+        $temp = Db::table('equipment')->where('sid', $site)->select();
+        if (!empty($temp) && $temp[0]['id'] != $id) {
+            echoJson(0,'站点已被绑定');
         }
+        $data['sid'] = $site;
         Db::table('equipment')->where('id', $id)->update($data);
 
         echoJson(1,'更新成功');
