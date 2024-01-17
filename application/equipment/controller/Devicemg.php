@@ -92,7 +92,11 @@ class Devicemg extends Controller
         $equipmentname = $request->param('equipmentname', null);
         $device_address = $request->param('device_address', null);
         $sid = $request->param('sid', null);
-        echo $sid;
+        if (empty($sid)) {
+            echo 1111;
+        } else {
+            echo 2222;
+        }
         $state = $request->param('state', null);
 
         $this->equip->updateequ($id,$equipmentname, $device_address, $sid, $state);
