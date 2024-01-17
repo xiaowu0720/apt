@@ -92,6 +92,7 @@ class Devicemg extends Controller
         $equipmentname = $request->param('equipmentname', null);
         $device_address = $request->param('device_address', null);
         $sid = $request->param('sid', null);
+        echo $sid;
         $state = $request->param('state', null);
 
         $this->equip->updateequ($id,$equipmentname, $device_address, $sid, $state);
@@ -113,21 +114,4 @@ class Devicemg extends Controller
 
         echoJson(1,'删除成功');
     }
-
-//    public function bindequipent(Request $request){
-//        $id = $request->param('id');
-//        $site = $request->param('site');
-//        $this->equip->bindequipent($id,$site);
-//    }
-//
-//    public function disablequipment(){
-//        $this->info=$_REQUEST;
-//        $id=$this->info['id'];
-//        $state=$this->info['state'];
-//        $data=[
-//            'state'=>$state
-//        ];
-//        Db::table('equipment')->where('id',$id)->update($data);
-//        echoJson(1,'更新成功');
-//    }
 }
