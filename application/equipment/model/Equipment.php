@@ -98,7 +98,11 @@ class Equipment extends Model
         if (!empty($temp) && $temp[0]['id'] != $id) {
             echoJson(0,'站点已被绑定');
         }
-        $data['sid'] = $site;
+        if (empty($site)) {
+            $data['sid'] = null;
+        } else {
+            $data['sid'] = $site;
+        }
         Db::table('equipment')->where('id', $id)->update($data);
 
         echoJson(1,'更新成功');
