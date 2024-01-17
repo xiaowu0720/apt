@@ -1,8 +1,8 @@
 <?php
 return [
     'aliyun_oss' => [
-        'Key' => 'LTAI5tNnyozRyipNRJcwr9at',
-        'KeySecret' => 'O1xjDEG7XY8jPg2ywLtmtPvHq3v8L',
+        'Key' => 'LTAI5tN3aruu8J2NQuQc1QKx',
+        'KeySecret' => 'BzXfbYklJP0kKx1NG7sjJukDzrLOcf',
         'Endpoint' => 'oss-cn-chengdu.aliyuncs.com',
         'bucket' => 'aptpm25',
         'host' => "aptpm25.oss-cn-chengdu.aliyuncs.com",
