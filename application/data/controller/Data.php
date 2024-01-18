@@ -31,7 +31,7 @@ class Data extends Controller{
             ->field('device_address')
             ->select();
         if (empty($addr)) {
-            echoJson(0,'不存在该站点');
+            echoJson(0,'该站点没有添加设备');
         }
         $data = $redis->hGet($addr[0]['device_address'], $time);
         $dataArray = explode(' ', $data);

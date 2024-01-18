@@ -26,6 +26,7 @@ Route::resource('city', 'city/City');
 Route::resource('announcement', 'announcement/Announcement')->middleware(['Auth']);
 Route::resource('user','user/User')->middleware(['Auth']);
 Route::resource('image','image/Image')->middleware(['Auth']);
+Route::resource('send_message','popups/Popups')->middleware(['Auth']);
 
 Route::get('oss', 'aliyun/Getsignature/getOssSignature')->middleware(['Auth']);
 

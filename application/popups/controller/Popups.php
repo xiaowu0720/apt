@@ -26,18 +26,21 @@ class Popups extends Controller
      */
     public function index(Request $request)
     {
-        $action = $request->param('action', 'setup');
-        $page = $request->param('page',1);
-        $count = $request->param('count',10);
-
+        $page = $request->param('page', 1);
+        $count = $request->param('count', 10);
         if (empty($page)) {
             $page = 1;
         }
         if (empty($count)) {
             $count = 10;
         }
+        $data=Db::table('send_message')
+            ->page($page, $count)
+            ->select();
 
-        $this->popups->popindex($page, $count, $action);
+        $count = Db::table('send_message')->count();
+
+        echoJson(1,'查询成功',$data,$page,$count);
     }
 
 
@@ -49,6 +52,11 @@ class Popups extends Controller
      */
     public function save(Request $request)
     {
+        $id=Db::table('send_message')->count()+1;
+        $minaqi = $request->param('minaqi');
+        $maxaqi = $request->param('maxaqi');
+        $content = $request->param('content');
+        $this->popups->addpopup($id,$minaqi,$maxaqi,$content);
 
     }
 
@@ -60,11 +68,6 @@ class Popups extends Controller
      */
     public function read($id, Request $request)
     {
-        $data = Db::table('popup')
-            ->where('id', $id)
-            ->select();
-
-        echoJson(1,'查询成功',$data,1,1);
     }
 
     /**
@@ -76,6 +79,10 @@ class Popups extends Controller
      */
     public function update(Request $request, $id)
     {
+        $minaqi = $request->put('minaqi');
+        $maxaqi = $request->put('maxaqi');
+        $content = $request->put('content');
+        $this->popups->updatepopup($id,$minaqi,$maxaqi,$content);
 
     }
 
@@ -87,7 +94,7 @@ class Popups extends Controller
      */
     public function delete($id)
     {
-        Db::table('popup')->where('id',$id)->delete();
+        Db::table('send_message')->where('id',$id)->delete();
         echoJson(1,'删除成功');
     }
 
