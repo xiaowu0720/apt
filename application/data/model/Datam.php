@@ -16,7 +16,6 @@ class Datam extends Model
     }
 
     public function  calendardata($site, $date) {
-        echo getdevice_address($site);
         try {
             $date = new \DateTime($date);
             $date = $date->format('Ym');
