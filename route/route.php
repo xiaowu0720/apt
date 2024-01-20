@@ -35,6 +35,8 @@ Route::get('ranking', 'data/Data/ranking');
 Route::get('getcode','user/Getcode/getcode');
 //用户登录
 Route::post('user/login','user/Login/user_Login');
+//用户注册
+Route::post('enroll', 'user/Enroll/user_enroll');
 //获取实时数据
 Route::get('getdata/:id','data/Data/getdata')->middleware(['UserLoginAuth']);
 //日历数据
