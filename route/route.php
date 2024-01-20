@@ -61,7 +61,8 @@ Route::get('yeardata/:id', 'data/Data/yeardata');
 Route::get('today/:id', 'popups/day/day');
 //得到今日公告
 Route::get('day/:id', 'announcement/day/day');
-
+//忘记密码
+Route::post('forget', 'user/Forget/forget');
 //商品详情
 Route::get('text', 'store/Store/text')->middleware(['UserLoginAuth']);
 
