@@ -55,6 +55,10 @@ Route::get('location','data/Data/location')->middleware(['UserLoginAuth']);
 Route::get('mothdata/:id','data/Data/mothdata');
 //年度分析
 Route::get('yeardata/:id', 'data/Data/yeardata');
+//得到今日弹窗
+Route::get('today/:id', 'popups/day/day');
+//得到今日公告
+Route::get('day/:id', 'announcement/day/day');
 
 //商品详情
 Route::get('text', 'store/Store/text')->middleware(['UserLoginAuth']);
