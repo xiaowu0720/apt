@@ -36,6 +36,7 @@ class Popups extends Controller
         }
         $data=Db::table('send_message')
             ->page($page, $count)
+            ->order('minaqi','desc')
             ->select();
 
         $count = Db::table('send_message')->count();

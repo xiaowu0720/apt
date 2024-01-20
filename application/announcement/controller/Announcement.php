@@ -34,8 +34,8 @@ class Announcement extends Controller
         }
         $data=Db::table('announcement')
             ->page($page, $count)
+            ->order('minaqi','desc')
             ->select();
-
         $count = Db::table('announcement')->count();
 
         echoJson(1,'查询成功',$data,$page,$count);
