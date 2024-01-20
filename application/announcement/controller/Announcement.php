@@ -34,7 +34,7 @@ class Announcement extends Controller
         }
         $data=Db::table('announcement')
             ->page($page, $count)
-            ->order('minaqi','desc')
+            ->order('minaqi','asc')
             ->select();
         $count = Db::table('announcement')->count();
 
