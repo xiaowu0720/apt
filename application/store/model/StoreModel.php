@@ -50,6 +50,7 @@ class StoreModel extends Model
 
         $data = $data
             ->page($page,$count)
+            ->where('state','1')
             ->select();
 
         $count = count(Db::table('ad')->select());
