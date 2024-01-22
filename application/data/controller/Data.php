@@ -91,7 +91,7 @@ class Data extends Controller{
     {
         $manner = $request->param('manner', 'aqi');
         $sort = $request->param('sort','desc');
-        $this->data->ranking($manner);
+        $this->data->ranking($manner, $sort);
     }
 
     public function calendardata(Request $request, $id)

@@ -55,11 +55,11 @@ class Datam extends Model
         }
         if ($sort == 'desc') {
             usort($data, function ($a, $b) {
-                return $a['value'] - $b['value'];
+                return $b['value'] - $a['value'];
             });
         } else {
             usort($data, function ($a, $b) {
-                return $a['value'] + $b['value'];
+                return $a['value'] - $b['value'];
             });
         }
         echoJson(1,'查询成功', $data);
