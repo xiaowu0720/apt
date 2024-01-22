@@ -31,7 +31,7 @@ class Datam extends Model
         }
     }
 
-    public function ranking($manner) {
+    public function ranking($manner, $sort) {
         if (empty($manner)) {
             $manner = 'aqi';
         }
@@ -53,9 +53,15 @@ class Datam extends Model
                 'value' => (int)$result[$manner],
             ];
         }
-        usort($data, function ($a, $b) {
-            return $a['value'] - $b['value'];
-        });
+        if ($sort == 'desc') {
+            usort($data, function ($a, $b) {
+                return $a['value'] - $b['value'];
+            });
+        } else {
+            usort($data, function ($a, $b) {
+                return $a['value'] + $b['value'];
+            });
+        }
         echoJson(1,'查询成功', $data);
     }
 

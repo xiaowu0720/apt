@@ -90,6 +90,7 @@ class Data extends Controller{
     public function ranking(Request $request)
     {
         $manner = $request->param('manner', 'aqi');
+        $sort = $request->param('sort','desc');
         $this->data->ranking($manner);
     }
 
