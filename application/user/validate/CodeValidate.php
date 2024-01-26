@@ -9,7 +9,7 @@ class CodeValidate extends Validate{
     ];
 
     protected $message = [
-        'email.require' => '邮箱地址不能为空',
-        'email.email' => '邮箱格式错误',
+        'email.require' => 'The email address cannot be empty',
+        'email.email' => 'The mailbox is malformed',
     ];
 }

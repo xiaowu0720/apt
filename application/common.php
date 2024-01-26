@@ -107,3 +107,48 @@ function getdevice_address($id)
     return $data[0]['device_address'];
 }
 
+/**
+ * 邮箱验证码
+ * @param string $to 发送到邮箱
+ * @param string $name 当前邮箱服务器
+ * @return string $subject 发送标题
+ * @return string $body 发送内容
+ * @return string $attachment 附件
+ */
+function send_mail($to, $name, $subject = '', $body = '',$attachment = null) {
+    $mail = new \PHPMailer\PHPMailer\PHPMailer();           //实例化PHPMailer对象
+    $mail->CharSet = 'UTF-8';           //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
+    $mail->IsSMTP();                    // 设定使用SMTP服务
+    $mail->SMTPDebug = 1;               // SMTP调试功能 0=关闭 1 = 错误和消息 2 = 消息
+    $mail->SMTPAuth = true;             // 启用 SMTP 验证功能
+    $mail->SMTPSecure = 'ssl';          // 使用安全协议
+    $mail->Host = "smtp.gmail.com";       // SMTP 服务器
+    $mail->Port = 465;                  // SMTP服务器的端口号
+    $mail->Username = 'xiaowutongxue1234@gmail.com';    // SMTP服务器用户名
+    $mail->Password = 'wqc040720.';     // SMTP服务器密码//这里的密码可以是邮箱登录密码也可以是SMTP服务器密码
+    $mail->SetFrom('发件邮箱', 'xxx有限公司');
+    $replyEmail = '环境监测';                   //留空则为发件人EMAIL
+    $replyName = '';                    //回复名称（留空则为发件人名称）
+    $mail->AddReplyTo($replyEmail, $replyName);
+    $mail->Subject = $subject;
+    $mail->MsgHTML($body);
+    $mail->AddAddress($to, $name);
+    if (is_array($attachment)) { // 添加附件
+        foreach ($attachment as $file) {
+            is_file($file) && $mail->AddAttachment($file);
+        }
+    }
+    return $mail->Send() ? true : $mail->ErrorInfo;
+}
+
+function generateRandomCode($length = 6) {
+    $characters = '0123456789';
+    $code = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $code .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $code;
+}
+

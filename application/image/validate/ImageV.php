@@ -11,7 +11,7 @@ class ImageV extends Validate
     ];
 
     protected $message = [
-        'image.require' => '图片地址不能为空',
+        'image.require' => 'The image address cannot be empty',
     ];
 
 }

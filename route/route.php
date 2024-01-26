@@ -32,7 +32,7 @@ Route::get('oss', 'aliyun/Getsignature/getOssSignature')->middleware(['Auth']);
 
 Route::get('ranking', 'data/Data/ranking');
 //获取验证码
-Route::get('getcode','user/Getcode/getcode');
+Route::post('email','user/Index/getEmailCode');
 //用户登录
 Route::post('user/login','user/Login/user_Login');
 //用户注册

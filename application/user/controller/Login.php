@@ -32,7 +32,7 @@ class Login extends Controller {
             echoJson(0,$validate->getError());
         }
         if($data=$this->user->user_login($phone,$password)){
-            echoJson(1,'登录成功',$data);
+            echoJson(1,'Login successful',$data);
         }
     }
 }

@@ -25,9 +25,9 @@ class Datam extends Model
                 ->where('device_address', getdevice_address($site))
                 ->select();
 
-            echoJson(1, '查询成功', $data);
+            echoJson(1, 'The query succeeded', $data);
         } catch (Exception $e) {
-            echoJson(1, '查询成功');
+            echoJson(1, 'The query succeeded');
         }
     }
 
@@ -62,7 +62,7 @@ class Datam extends Model
                 return $a['value'] - $b['value'];
             });
         }
-        echoJson(1,'查询成功', $data);
+        echoJson(1,'The query succeeded', $data);
     }
 
     public function monthdata($site, $start_date, $end_date) {
@@ -219,7 +219,7 @@ class Datam extends Model
             $sum['co2'] = (int)$sum['co2'];
         }
 
-        echoJson(1, '查询成功', $data);
+        echoJson(1, 'The query succeeded', $data);
     }
 
 }

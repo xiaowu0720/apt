@@ -22,11 +22,17 @@ class Enroll extends Controller{
     public function user_enroll(){
         $phone=$this->info['phone'];
         $password=$this->info['password'];
-//        $code = $this->info['code'];
+        $email = $this->info['email'];
+        $code = $this->info['code'];
         $data=[
             'phone'=>$phone,
-            'password'=>$password
+            'password'=>$password,
+            'email' => $email
         ];
+        $redis = init_redis();
+        if ($code != $redis->get($email)){
+            echoJson(0, 'The verification code is incorrect');
+        }
         $validate=new \app\user\validate\UserValidate();
         if(!$validate->check($data)){
             echoJson(0,$validate->getError());

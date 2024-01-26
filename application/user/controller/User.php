@@ -85,7 +85,7 @@ class User extends Controller
         $data = Db::table('user')
             ->where('id',$id)
             ->select();
-        echoJson(1,'查询成功',$data[0]);
+        echoJson(1,'Login successful',$data[0]);
     }
 
     /**
@@ -131,7 +131,7 @@ class User extends Controller
             $data['phone'] = $phone;
             $temp = Db::table('user')->where('phone',$phone)->select();
             if (!empty($temp) && $temp[0]['id'] != $id) {
-                echoJson(0,'该手机号已被注册');
+                echoJson(0,'The mobile phone number has been registered');
             }
         }
 
@@ -155,7 +155,7 @@ class User extends Controller
             $data['roleId'] = $roleId;
         }
         Db::table('user')->where('id',$id)->update($data);
-        echoJson(1,'更新成功');
+        echoJson(1,'The update was successful');
     }
 
     /**

@@ -11,6 +11,6 @@ class Vequipment extends \think\Validate
     ];
 
     protected $message = [
-        'device_address' => '设备地址不能为空',
+        'device_address' => 'The device address cannot be empty',
     ];
 }

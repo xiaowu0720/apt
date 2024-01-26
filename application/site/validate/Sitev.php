@@ -16,11 +16,11 @@ class Sitev extends Validate
     ];
 
     protected $message = [
-        'name.require'      => '站点名称不能为空',
-        'longitude.require' => '经度不能为空',
-        'latitude.require'  => '纬度不能为空',
-        'address.require'   => '地址不能为空',
-        'province.require'  => '省份不能为空',
-        'county.require'    => '城市不能为空',
+        'name.require'      => 'The site name cannot be empty',
+        'longitude.require' => 'Longitude cannot be empty',
+        'latitude.require'  => 'The latitude cannot be empty',
+        'address.require'   => 'The address cannot be empty',
+        'province.require'  => 'Provinces cannot be empty',
+        'county.require'    => 'Cities cannot be empty',
     ];
 }

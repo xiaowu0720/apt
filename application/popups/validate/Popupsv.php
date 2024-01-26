@@ -17,10 +17,10 @@ class Popupsv extends Validate
     ];
 
     protected $message = [
-        'start_date.require' => '开始日期不能为空',
-        'end_date.require' => '截止日期不能为空',
-        'content.require' => '内容不能为空',
-        'title.require'=>'标题不能为空',
-        'image.require'=>'请上传图片'
+        'start_date.require' => 'The start date cannot be empty',
+        'end_date.require' => 'The deadline cannot be empty',
+        'content.require' => 'The content cannot be empty',
+        'title.require'=>'The title cannot be empty',
+        'image.require'=>'Please upload an image'
     ];
 }

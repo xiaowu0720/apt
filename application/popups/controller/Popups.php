@@ -41,7 +41,7 @@ class Popups extends Controller
 
         $count = Db::table('send_message')->count();
 
-        echoJson(1,'查询成功',$data,$page,$count);
+        echoJson(1,'The query succeeded',$data,$page,$count);
     }
 
 
@@ -96,7 +96,7 @@ class Popups extends Controller
     public function delete($id)
     {
         Db::table('send_message')->where('id',$id)->delete();
-        echoJson(1,'删除成功');
+        echoJson(1,'The deletion is successful');
     }
 
 }

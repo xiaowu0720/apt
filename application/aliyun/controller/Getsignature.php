@@ -11,7 +11,7 @@ class Getsignature extends Controller
         if ($this->request->isGet())
         {
             $road = 'test';
-            echoJson(1,"生成阿里云签名成功", $oss->getSignature($road));
+            echoJson(1,"The Alibaba Cloud signature is generated", $oss->getSignature($road));
         }
     }
 }

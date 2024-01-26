@@ -35,7 +35,7 @@ class Devicemg extends Controller
         }
         $data = Db::table('equipment')->page($page, $count)->select();
 
-        echoJson(1,'查询成功',$data,$page,count($data));
+        echoJson(1,'The query succeeded',$data,$page,count($data));
     }
 
 
@@ -68,7 +68,7 @@ class Devicemg extends Controller
                 ->where('id', $id)
                 ->select();
 
-            echoJson(1,'查询成功',$data,1,1);
+            echoJson(1,'The query succeeded',$data,1,1);
         }
         $state = $request->param('state', null);
         $equipmentname = $request->param('equipmentname', null);
@@ -111,6 +111,6 @@ class Devicemg extends Controller
         // 将大于删除设备id的数减一
         Db::table('equipment')->where('id', '>', $id)->setDec('id');
 
-        echoJson(1,'删除成功');
+        echoJson(1,'The deletion is successful');
     }
 }

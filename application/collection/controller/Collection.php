@@ -79,7 +79,7 @@ class Collection extends Controller //收藏
 
         ];
         
-        echoJson(1,'查询成功',$data);
+        echoJson(1,'The query succeeded',$data);
     }
 
     //
@@ -114,6 +114,6 @@ class Collection extends Controller //收藏
             $data[]=$datatemp;
             $time=$temp;
         }
-        echoJson(1,'查询成功',$data);
+        echoJson(1,'The query succeeded',$data);
     }
 }

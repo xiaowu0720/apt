@@ -31,7 +31,7 @@ class SiteModel extends Model
         }
         $data = $data->page($page, $count)->select();
         $count1 = $count1->count();
-        echoJson(1, '查询成功',$data,$page, $count1);
+        echoJson(1, 'The query succeeded',$data,$page, $count1);
     }
 
 
@@ -41,7 +41,7 @@ class SiteModel extends Model
             ->where('id', $data['cityid'])
             ->select();
         if(empty($temp)){
-            echoJson(0,'请先添加城市');
+            echoJson(0,'Please add the city first');
         }
         $data['province'] = $temp[0]['province'];
         $data['county'] = $temp[0]['cityname'];
@@ -49,10 +49,10 @@ class SiteModel extends Model
             ->where('name', $data['name'])
             ->select();
         if(!empty($rel)){
-            echoJson(0,'已经存在该站点名称');
+            echoJson(0,'The site name already exists');
         }
         Db::table('site')->insert($data);
-        echoJson(1,'站点创建成功');
+        echoJson(1,'The site is created successfully');
     }
 
     public function read($name, $province, $county, $address,$page,$count)
@@ -80,7 +80,7 @@ class SiteModel extends Model
             ->page($page,$count)
             ->select();
         $count = $sum->count();
-        echoJson(1,'查询成功',$data,$page,$count);
+        echoJson(1,'The query succeeded',$data,$page,$count);
     }
 
     public function siteupdate($id, $data)
@@ -89,9 +89,9 @@ class SiteModel extends Model
             ->where('name', $data['name'])
             ->select();
         if(!empty($rel) && $rel[0]['name'] != $data['name']){
-            echoJson(0,'已经存在该站点名称');
+            echoJson(0,'The site name already exists');
         }
         Db::table('site')->where('id',$id)->update($data);
-        echoJson(1,'更新成功');
+        echoJson(1,'The update was successful');
     }
 }

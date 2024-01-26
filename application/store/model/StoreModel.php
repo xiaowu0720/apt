@@ -41,7 +41,7 @@ class StoreModel extends Model
             ];
             $data[] = $temp1;
         }
-        echoJson(1, '查询成功', $data);
+        echoJson(1, 'The query succeeded', $data);
     }
 
     public function index($page, $count)
@@ -54,13 +54,13 @@ class StoreModel extends Model
             ->select();
 
         $count = count(Db::table('ad')->select());
-        echoJson(1,'查询成功',$data, $page, $count);
+        echoJson(1,'The query succeeded',$data, $page, $count);
     }
 
     public function addstore($data)
     {
         Db::table('ad')->insert($data);
-        echoJson(1,'添加成功');
+        echoJson(1,'The addition was successful');
     }
 
     public function delstore($id)
@@ -70,7 +70,7 @@ class StoreModel extends Model
             'deltime' => date('Y-m-d H:i:s',time()),
         ];
         Db::table('ad')->where('id',$id)->update($data);
-        echoJson(1,'删除成功');
+        echoJson(1,'The deletion is successful');
     }
 
     public function updatestore($id, $data)
@@ -79,7 +79,7 @@ class StoreModel extends Model
             ->where('id', $id)
             ->update($data);
 
-        echoJson(1,'更新成功');
+        echoJson(1,'The update was successful');
     }
 
 
@@ -90,9 +90,9 @@ class StoreModel extends Model
             ->field('id,text,adname,addesc,money,phone,image')
             ->select();
         if (empty($data)) {
-            echoJson(0,'商品不存在');
+            echoJson(0,'The product does not exist');
         }
 
-        echoJson(1, '查询成功', $data[0]);
+        echoJson(1, 'The query succeeded', $data[0]);
     }
 }

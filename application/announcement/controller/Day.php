@@ -17,7 +17,7 @@ class Day extends Controller
             ->field('device_address')
             ->select();
         if (empty($addr)) {
-            echoJson(0,'不存在该站点');
+            echoJson(0,'The site does not exist');
         }
         $data = $redis->hGet($addr[0]['device_address'], $time);
         $dataArray = explode(' ', $data);
@@ -42,9 +42,9 @@ class Day extends Controller
             ->where('minaqi','<=',$result['aqi'])
             ->select();
         if (empty($temp)) {
-            echoJson(0,'没有当前范围的公告');
+            echoJson(0,'There are no announcements for the current scope');
         }
-        echoJson(1,'查询成功',$temp[0]);
+        echoJson(1,'The query succeeded',$temp[0]);
     }
 
 }

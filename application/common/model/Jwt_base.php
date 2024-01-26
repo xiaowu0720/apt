@@ -10,7 +10,7 @@ use Firebase\JWT\Key;
 class Jwt_base
 {
 
-    const ERROR_INFO = '令牌无效，请重新登录';
+    const ERROR_INFO = 'The token is invalid, please log in again';
 
     public $jwt_key;
 

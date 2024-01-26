@@ -15,15 +15,15 @@ class Announcementm extends Model{
             'content'=>$content
         ];
         if ($maxaqi <= $minaqi) {
-            echoJson(0,'max必须小于min');
+            echoJson(0,'Max must be less than min');
         }
 
         $reult=Db::table('announcement')->where('minaqi','<=',$maxaqi)->where('maxaqi','>=',$minaqi)->select();
         if(!empty($reult)){
-            echoJson(0,'已经存在这个范围的公告');
+            echoJson(0,'Announcements of this range already exist');
         }
         Db::table('announcement')->insert($data);
-        echoJson(1,'添加成功');
+        echoJson(1,'The addition was successful');
     }
     //更新公告
     public function updateannouncement($id,$minaqi,$maxaqi,$content){
@@ -38,9 +38,9 @@ class Announcementm extends Model{
             $data['content'] = $content;
         }
         if (!empty($maxaqi) && !empty($minaqi) && $maxaqi <= $minaqi) {
-            echoJson(0,'max必须小于min');
+            echoJson(0,'Max must be less than min');
         }
         Db::table('announcement')->where('id',$id)->update($data);
-        echoJson(1,'更新成功');
+        echoJson(1,'The update was successful');
     }
 }

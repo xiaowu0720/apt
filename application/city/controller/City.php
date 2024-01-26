@@ -39,7 +39,7 @@ class City extends Controller
             ->select();
         $count = Db::table('citylist')->select();
 
-        echoJson(1, '查询成功', $data, $page, count($count));
+        echoJson(1, 'The query succeeded', $data, $page, count($count));
     }
 
 
@@ -78,7 +78,7 @@ class City extends Controller
                 ->where('id', $id)
                 ->select();
 
-            echoJson(1,'查询成功',$data,1,1);
+            echoJson(1,'The query succeeded',$data,1,1);
         }
         $cityname = $request->param('cityname', null);
         $province = $request->param('province',null);
@@ -150,6 +150,6 @@ class City extends Controller
             ];
             $data[] = $temp3;
         }
-        echoJson(1,'查询成功',$data);
+        echoJson(1,'The query succeeded',$data);
     }
 }

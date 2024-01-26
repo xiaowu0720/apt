@@ -31,9 +31,9 @@ class Data extends Controller{
             ->field('device_address')
             ->select();
         if (empty($addr)) {
-            echoJson(0,'该站点没有添加设备');
+            echoJson(0,'No devices are added to the site');
         }
-        $data = $redis->hGet($addr[0]['device_address'], $time);
+        $data = $redis->hGet($addr[0]['device_address'], 'data');
         $dataArray = explode(' ', $data);
 
         // Define the rounding function
@@ -51,8 +51,8 @@ class Data extends Controller{
 
         $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
         $result = array_combine($keys, array_map($roundingExcludeLastTwo, array_keys($dataArray), $dataArray));
-
-        echoJson(1, '查询成功', $result);
+        $result['datetime'] = $redis->hGet($addr[0]['device_address'], 'date')." ".$redis->hGet($addr[0]['device_address'], 'time');
+        echoJson(1, 'The query succeeded', $result);
     }
     //获取站点最近位置
     public function location()
@@ -63,7 +63,7 @@ class Data extends Controller{
         $tempdata = Db::table('site')
             ->select();
         if(empty($tempdata)){
-            echoJson('0','当前城市没有站点');
+            echoJson('0','There are no sites in the current city');
         }
         $min = PHP_FLOAT_MAX;
         $data = [];
@@ -177,7 +177,7 @@ class Data extends Controller{
                 }
             }
         }
-        echoJson(1,'查询成功',$data);
+        echoJson(1,'The query succeeded',$data);
     }
 
 }

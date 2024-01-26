@@ -22,14 +22,14 @@ class User extends Model{
         $state=Db::table('user')->where('phone',$phone)->value('state');
         //var_dump($data);
         if($state==0){
-            echoJson(0,'账号已被管理员禁用，请联系管理员');
+            echoJson(0,'The account has been disabled by the administrator, please contact the administrator');
         }
         $password=md5($password);
         //echo $account."  ".$password;
         if($password==$data['password']){
             return $this->jwt->encode($data['id'],$data['roleId'],$phone);
         }else{
-            echoJson(0,'密码错误');
+            echoJson(0,'Wrong password');
         }
     }
     //用户注册
@@ -41,7 +41,7 @@ class User extends Model{
 //        }
         $data=Db::table('user')->where('phone',$phone)->select();
         if(!empty($data)){
-            echoJson(0,'手机号已被注册');
+            echoJson(0,'The mobile phone number has been registered');
         }
         $count=Db::table('user')->count()+1;
         $data=[
@@ -55,7 +55,7 @@ class User extends Model{
         ];
         $result=Db::table('user')->insert($data);
         if(!empty($result)){
-            echoJson('1','注册成功');
+            echoJson(1,'Registration is successful');
         }
     }
     //验证验证码
@@ -80,7 +80,7 @@ class User extends Model{
             'password'=>md5($newpassword)
         ];
         Db::table('user')->where('phone',$phone)->update($data);
-        echoJson(1,'密码更改成功，请返回登录');
+        echoJson(1,'The password change is successful, please return to log in');
     }
 
     //更新用户状态
@@ -89,7 +89,7 @@ class User extends Model{
             'state'=>$state
         ];
         Db::table('user')->where('id',$id)->update($data);
-        echoJson(1,'状态更新成功');
+        echoJson(1,'The status update was successful');
     }
     //设置用户权限
     public function setuserpermissions($id,$roleId){
@@ -98,13 +98,13 @@ class User extends Model{
             'roleId'=>$roleId
         ];
         Db::table('user')->where('id',$id)->update($data);
-        echoJson(1,'设置权限成功');
+        echoJson(1,'The permission was set successfully');
     }
 
     //删除用户
     public function deluser($id){
         Db::table('user')->where('id',$id)->delete();
-        echoJson(1,'删除成功');
+        echoJson(1,'The deletion is successful');
     }
 
     //管理员登录
@@ -112,18 +112,18 @@ class User extends Model{
         $data=Db::table('user')->where('phone',$phone)->find();
         $state=Db::table('user')->where('phone',$phone)->value('state');
         if($data['roleId']>1){
-            echoJson(0,"该用户不是管理员");
+            echoJson(0,"The user is not an administrator");
         }
         //var_dump($data);
         if($state==0){
-            echoJson(0,'账号已被管理员禁用，请联系超级管理员');
+            echoJson(0,'The account has been disabled by the administrator, please contact the super administrator');
         }
         $password=md5($password);
         //echo $account."  ".$password;
         if($password==$data['password']){
             return $this->jwt->encode($data['id'],$data['roleId'],$phone);
         }else{
-            echoJson(0,'密码错误');
+            echoJson(0,'Wrong password');
         }
     }
 
@@ -163,12 +163,33 @@ class User extends Model{
             ->page($page,$count)
             ->select();
         $temp = $temp->count();
-        echoJson(1 ,'查询成功', $data, $page, $temp);
+        echoJson(1 ,'The query succeeded', $data, $page, $temp);
     }
 
     //用户修改个人信息
     public function putdmessage()
     {
 
+    }
+
+    public function register($email,$code,$password){
+        $user = $this->where('email',$email)->find();
+        if($user) return reMsg(0,'The user already exists');
+
+        // 设置验证码有效期60秒，过期清空
+        if(time() > session('emailCodeStartTime') + 60){
+            session('emailCode',null);
+            return reMsg(0,'The verification code has expired');//reMsg是自己封装的方法，用于反馈数据库的操作结果
+        }
+
+        if($code != session('emailCode')) return reMsg(0,'The verification code has expired');
+
+        $this->save([
+            'email'     => $email,
+            'password'  => md5($password)
+        ]);
+        // 当验证码成功使用，清空验证码
+        session('emailCode',null);
+        return reMsg(1,'Registration is successful');
     }
 }

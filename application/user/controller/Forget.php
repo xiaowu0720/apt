@@ -20,20 +20,20 @@ class Forget extends Controller{
 
     public function forget(Request $request){
         $phone=$request->param('phone');
-//        $code=$this->info['code'];
+        $email = $request->param('email');
+        $code=$request->param('code');
         $newpassword=$request->param('newpassword');
         $repeatnewpassword=$request->param('repeatnewpassword');
+        $redis = init_redis();
+        if ($code != $redis->get($email)) {
+            echoJson(0, 'The verification code is incorrect');
+        }
         if (empty($phone)) {
-            echoJson(0,'请输入手机号');
+            echoJson(0,'Please enter your mobile phone number');
         }
         if($newpassword!==$repeatnewpassword){
-            echoJson(0,'两次密码不一样');
+            echoJson(0,'The password is not the same twice');
         }
         $this->user->restpassword($phone,$newpassword);
-//        $redis=init_redis();
-//        $verify=$redis->get($phone);
-//        if($verify!==$code){
-//            echoJson(0,'验证码错误');
-//        }
     }
 }

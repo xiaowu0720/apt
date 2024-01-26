@@ -41,11 +41,11 @@ class Auth
         //校验解析token之后的格式
         if(!is_array($data))
         {
-            echoJson(403,'token错误');
+            echoJson(403,'The token is wrong');
         }
 //        $this->check($token, $data);
         if($this->interfaceAuth->check($data['roleId'])){
-            echoJson(0,"权限不足");
+            echoJson(0,"Insufficient permissions");
         }
         return $next($request);
     }
@@ -54,7 +54,7 @@ class Auth
     {
         if($token != $this->redis->hGet('valid',$data["id"]))
         {
-            echoJson(-1,'账号在其他地方登录，请重新登录');
+            echoJson(-1,'If you log in to your account elsewhere, please log in again');
         }
     }
 }

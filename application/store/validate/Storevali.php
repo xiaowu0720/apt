@@ -16,9 +16,9 @@ class Storevali extends Validate
     ];
 
     protected $message = [
-        'addesc.require' => '商品简介不能为空',
-        'phone.require' => '联系方式不能为空',
-        'money.require'=>'商品金额不能为空',
-        'adname.require'=>'商品名称不能为空',
+        'addesc.require' => 'The description cannot be empty',
+        'phone.require' => 'Contact details cannot be left blank',
+        'money.require'=>'The product amount cannot be empty',
+        'adname.require'=>'The title cannot be empty',
     ];
 }

@@ -38,7 +38,7 @@ class Announcement extends Controller
             ->select();
         $count = Db::table('announcement')->count();
 
-        echoJson(1,'查询成功',$data,$page,$count);
+        echoJson(1,'The query succeeded',$data,$page,$count);
     }
 
 
@@ -98,6 +98,6 @@ class Announcement extends Controller
     public function delete($id)
     {
         Db::table('announcement')->where('id',$id)->delete();
-        echoJson(1,'删除成功');
+        echoJson(1,'The deletion is successful');
     }
 }

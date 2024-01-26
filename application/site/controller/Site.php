@@ -83,7 +83,7 @@ class Site extends Controller
                 ->where('id', $id)
                 ->select();
 
-            echoJson(1,'查询成功',$data,1,1);
+            echoJson(1,'The query succeeded',$data,1,1);
         }
         $name = $request->param('name',null);
         $province = $request->param('province',null);
@@ -158,6 +158,6 @@ class Site extends Controller
         // 更新大于当前ID的记录
 //        Db::table('site')->where('id', '>', $id)->setDec('id');
 
-        echoJson(1, '删除成功');
+        echoJson(1, 'The deletion is successful');
     }
 }

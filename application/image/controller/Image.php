@@ -27,7 +27,7 @@ class Image extends Controller
 
         $data = Db::table('image')->page($page, $count)->select();
 
-        echoJson(1, '查询成功', $data, $page, sizeof($data));
+        echoJson(1, 'The query succeeded', $data, $page, sizeof($data));
     }
     /**
      * 保存新建的资源
@@ -46,7 +46,7 @@ class Image extends Controller
             echoJson(0, $validate->getError());
         }
         Db::table('image')->insert($data);
-        echoJson(1,'新增成功');
+        echoJson(1,'The new is successful');
     }
 
     /**
@@ -58,7 +58,7 @@ class Image extends Controller
     public function read($id)
     {
         $data = Db::table('image')->where('id', $id)->select();
-        echoJson(1,'查询成功', $data);
+        echoJson(1,'The query succeeded', $data);
     }
 
     /**
@@ -79,7 +79,7 @@ class Image extends Controller
             echoJson(0, $validate->getError());
         }
         Db::table('image')->where('id', $id)->update($data);
-        echoJson(1,'更新成功');
+        echoJson(1,'The update was successful');
     }
 
     /**
@@ -91,6 +91,6 @@ class Image extends Controller
     public function delete($id)
     {
         Db::table('image')->where('id', $id)->delete();
-        echoJson(1,'删除成功');
+        echoJson(1,'The deletion is successful');
     }
 }

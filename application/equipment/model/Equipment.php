@@ -44,14 +44,14 @@ class Equipment extends Model
         $count = $temp
             ->count();
 
-        echoJson(1,'查询成功',$data,$page,$count);
+        echoJson(1,'The query succeeded',$data,$page,$count);
     }
 
     public function addequipment($device_address,$equipmentname,$site){
         if (!empty($site)){
             $temp = Db::table('equipment')->where('sid', $site)->select();
             if (!empty($temp)) {
-                echoJson(0,'站点已被绑定');
+                echoJson(0,'The site has been bound');
             }
         }
         $count=Db::table('equipment')->count();
@@ -69,14 +69,14 @@ class Equipment extends Model
         }
         $pd=Db::table('equipment')->where('device_address',$data['device_address'])->select();
         if(!empty($pd)){
-            echoJson(0,'已存在该设备');
+            echoJson(0,'The device already exists');
         }
         $pd=Db::table('equipment')->where('equipmentname',$data['equipmentname'])->select();
         if(!empty($pd)){
-            echoJson(0,'设备名不允许重复');
+            echoJson(0,'Device names cannot be duplicated');
         }
         Db::table('equipment')->insert($data);
-        echoJson(1,'设备添加成功');
+        echoJson(1,'The device is added successfully');
     }
 
     public function updateequ($id,$equipmentname, $device_address, $site, $state)
@@ -96,7 +96,7 @@ class Equipment extends Model
 
         $temp = Db::table('equipment')->where('sid', $site)->select();
         if (!empty($temp) && $temp[0]['id'] != $id) {
-            echoJson(0,'站点已被绑定');
+            echoJson(0,'The site has been bound');
         }
         if (empty($site)) {
             $data['sid'] = null;
@@ -105,6 +105,6 @@ class Equipment extends Model
         }
         Db::table('equipment')->where('id', $id)->update($data);
 
-        echoJson(1,'更新成功');
+        echoJson(1,'The update was successful');
     }
 }

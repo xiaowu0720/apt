@@ -15,7 +15,7 @@ class Collectionm extends Model
             ->where('siteid', $siteid)
             ->select();
         if(!empty($reu)){
-            echoJson(0,'该城市已收藏');
+            echoJson(0,'The city has been bookmarked');
         }
         $data = [
             'id'     => $id,
@@ -23,7 +23,7 @@ class Collectionm extends Model
         ];
 
         Db::table('collection')->insert($data);
-        echoJson('1','收藏成功');
+        echoJson('1','Collected successfully');
     }
 
     public function colist($id)
@@ -66,7 +66,7 @@ class Collectionm extends Model
             ];
             $data[] = $temp2;
         }
-        echoJson(1,'查询成功',$data);
+        echoJson(1,'The query succeeded',$data);
     }
 
     public function del($id,$siteid)
@@ -75,7 +75,7 @@ class Collectionm extends Model
             ->where('id', $id)
             ->where('siteid', $siteid)
             ->delete();
-        echoJson('1','取消收藏成功');
+        echoJson('1','The unfavorites are successful');
     }
 
     public function sitelist($id,$province, $county)
@@ -119,6 +119,6 @@ class Collectionm extends Model
             }
             $data[] = $temp3;
         }
-        echoJson(1,'查询成功',$data);
+        echoJson(1,'The query succeeded',$data);
     }
 }
