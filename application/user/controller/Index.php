@@ -2,12 +2,14 @@
 
 namespace app\user\controller;
 
+use think\App;
 use think\Controller;
 use think\facade\Env;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use think\Request;
+use think\View;
 
 class Index extends Controller {
 
@@ -41,7 +43,7 @@ class Index extends Controller {
             // 邮件内容设置
             $mail->isHTML(true);                                  // 设置邮件格式为HTML
             $mail->Subject = 'Verification code:';              // 设置邮件主题
-            $mail->Body    = 'Your verification code is(Valid within five minutes):'.$code;  // 设置邮件正文
+            $mail->Body = $this->fetch('',["code"=>$code])->getContent();
 
             // 在创建实例后添加以下代码，禁用SSL证书验证
             $mail->SMTPOptions = [

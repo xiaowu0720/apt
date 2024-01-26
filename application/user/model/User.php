@@ -7,6 +7,7 @@ use think\Db;
 use think\Model;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use think\View;
 
 
 class User extends Model{
