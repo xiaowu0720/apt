@@ -30,6 +30,8 @@ Route::resource('send_message','popups/Popups')->middleware(['Auth']);
 
 Route::get('oss', 'aliyun/Getsignature/getOssSignature')->middleware(['Auth']);
 
+//站点目录带数据
+Route::get('sitelist','site/Site/sitelist');
 Route::get('ranking', 'data/Data/ranking');
 //获取验证码
 Route::post('email','user/Index/getEmailCode');

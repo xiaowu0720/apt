@@ -10,6 +10,8 @@ use think\Controller;
 use think\Db;
 use think\Request;
 
+
+
 class Site extends Controller
 {
     public $site;
@@ -160,4 +162,49 @@ class Site extends Controller
 
         echoJson(1, 'The deletion is successful');
     }
+
+    public function sitelist() {
+        $result = Db::table('site')->select();
+        $data1 = [];
+        foreach ($result as $temp) {
+            $id = $temp['id'];
+            $redis = init_redis();
+            $time = date('H');
+            $addr = Db::table('equipment')
+                ->where('sid', $id)
+                ->field('device_address')
+                ->select();
+            if (empty($addr)) {
+                $temp['aqi'] = null;
+                $temp['datetime'] = null;
+                continue;
+            }
+            $data = $redis->hGet($addr[0]['device_address'], 'data');
+            $dataArray = explode(' ', $data);
+
+            // Define the rounding function
+            $roundingFunction = function ($value) {
+                return round($value);
+            };
+
+            // Exclude the last two values from rounding
+            $roundingExcludeLastTwo = function ($key, $value) use ($roundingFunction, $dataArray) {
+                if ($key < count($dataArray) - 2) {
+                    return $roundingFunction($value);
+                }
+                return $value;
+            };
+
+            $keys = array('temperature', 'humidity', 'pm25', 'pm10', 'co', 'co2', 'aqi', 'api', 'primarypollutants', 'color');
+            $result = array_combine($keys, array_map($roundingExcludeLastTwo, array_keys($dataArray), $dataArray));
+            $result['datetime'] = $redis->hGet($addr[0]['device_address'], 'date')." ".$redis->hGet($addr[0]['device_address'], 'time');
+            $temp['aqi'] = $result['aqi'];
+            $temp['time'] = $result['datetime'];
+
+            // 将$temp数组添加到$data数组
+            $data1[] = $temp;
+        }
+        echoJson(1,'查询成功',$data1);
+    }
+
 }
