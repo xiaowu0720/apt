@@ -18,23 +18,34 @@ class User extends Model{
         $this->jwt=new Jwt_base();
     }
     //用户登录
-    public function user_login($phone,$password){
-        $data=Db::table('user')->where('phone',$phone)->find();
-        $state=Db::table('user')->where('phone',$phone)->value('state');
-        //var_dump($data);
-        if($state==0){
-            echoJson(0,'The account has been disabled by the administrator, please contact the administrator');
+    public function user_login($account,$password){
+        $data=Db::table('user')->where('phone',$account)->find();
+        if (empty($data)) {
+            $data=Db::table('user')->where('email',$account)->find();
+            $state=Db::table('user')->where('email',$account)->value('state');
+            if (empty($data)) {
+                echoJson(0,'不存在该用户');
+            }
+            if($state == 0){
+                echoJson(0,'The account has been disabled by the administrator, please contact the administrator');
+            }
+        }else{
+            $state=Db::table('user')->where('phone',$account)->value('state');
+            //var_dump($data);
+            if($state==0){
+                echoJson(0,'The account has been disabled by the administrator, please contact the administrator');
+            }
         }
         $password=md5($password);
         //echo $account."  ".$password;
         if($password==$data['password']){
-            return $this->jwt->encode($data['id'],$data['roleId'],$phone);
+            return $this->jwt->encode($data['id'],$data['roleId'],$account);
         }else{
             echoJson(0,'Wrong password');
         }
     }
     //用户注册
-    public function user_enroll($phone,$password){
+    public function user_enroll($phone,$password,$email){
 //        $redis = init_redis();
 //        $temp = $redis->hGet($phone,'code');
 //        if($temp != $code){
@@ -44,6 +55,10 @@ class User extends Model{
         if(!empty($data)){
             echoJson(0,'The mobile phone number has been registered');
         }
+        $data=Db::table('user')->where('email',$email)->select();
+        if(!empty($data)){
+            echoJson(0,'The email has been registered');
+        }
         $count=Db::table('user')->count()+1;
         $data=[
             'username'=>"user_".$count,
@@ -52,6 +67,7 @@ class User extends Model{
             'password'=>md5($password),
             'roleId'=>'2',
             'state'=>'1',
+            'email'=>$email,
             'useful_time'=>date('Y-m-d H:i:s',time())
         ];
         $result=Db::table('user')->insert($data);

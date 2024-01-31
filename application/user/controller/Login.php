@@ -21,17 +21,17 @@ class Login extends Controller {
     }
     public function user_login(Request $request){
 
-        $phone=$request->post('phone');
+        $account=$request->post('account');
         $password=$request->post('password');
         $data=[
-            'phone'=>$phone,
+            'account'=>$account,
             'password'=>$password
         ];
         $validate=new \app\user\validate\UserValidate();
         if(!$validate->check($data)){
             echoJson(0,$validate->getError());
         }
-        if($data=$this->user->user_login($phone,$password)){
+        if($data=$this->user->user_login($account,$password)){
             echoJson(1,'Login successful',$data);
         }
     }
