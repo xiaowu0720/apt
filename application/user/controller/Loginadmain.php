@@ -22,17 +22,17 @@ class Loginadmain extends Controller{
         $this->info=$_POST;
     }
     public function loginadmain(){
-        $phone=$this->info['phone'];
+        $account=$this->info['account'];
         $password=$this->info['password'];
         $data=[
-            'phone'=>$phone,
+            'account'=>$account,
             'password'=>$password
         ];
         $validate=new \app\user\validate\UserValidate();
         if(!$validate->check($data)){
             echoJson(0,$validate->getError());
         }
-        if($data=$this->user->user_login($phone,$password)){
+        if($data=$this->user->user_login($account,$password)){
             echoJson(1,'Login successful',$data);
         }
     }
