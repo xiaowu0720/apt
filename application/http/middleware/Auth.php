@@ -33,6 +33,9 @@ class Auth
         if ($path == 'store' && $method == 'GET') {
             return $next($request);
         }
+        if ($path == 'user' && $method == 'GET') {
+            return $next($request);
+        }
         //获取header里面的token
         $token = explode(" ",$_SERVER['HTTP_AUTHORIZATION'])[1];
         //校验与redis存储的是否一致
