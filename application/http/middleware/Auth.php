@@ -33,7 +33,7 @@ class Auth
         if ($path == 'store' && $method == 'GET') {
             return $next($request);
         }
-        if ($path == 'user' && $method == 'GET') {
+        if (substr($path,0,4) == 'user' && $method == 'GET') {
             return $next($request);
         }
         //获取header里面的token
