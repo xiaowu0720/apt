@@ -68,7 +68,8 @@ class User extends Model{
             'roleId'=>'2',
             'state'=>'1',
             'email'=>$email,
-            'useful_time'=>date('Y-m-d H:i:s',time())
+            'useful_time'=>date('Y-m-d H:i:s',time()),
+            'image'=>'https://aptpm25.oss-cn-chengdu.aliyuncs.com/userimage/R-C.jpg'
         ];
         $result=Db::table('user')->insert($data);
         if(!empty($result)){
