@@ -27,10 +27,10 @@ class Auth
     {
         $path = $request->path();
         $method = $request->method();
-        if ($path == 'site' && $method == 'GET') {
+        if (substr($path,0,4) && $method == 'GET') {
             return $next($request);
         }
-        if ($path == 'store' && $method == 'GET') {
+        if (substr($path,0,5) && $method == 'GET') {
             return $next($request);
         }
         if (substr($path,0,4) == 'user' && $method == 'GET') {
