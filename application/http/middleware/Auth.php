@@ -27,13 +27,13 @@ class Auth
     {
         $path = $request->path();
         $method = $request->method();
-        if (substr($path,0,4) && $method == 'GET') {
+        if (substr($path,0,4) == 'site' && $method == 'GET') {
             return $next($request);
         }
-        if (substr($path,0,5) && $method == 'GET') {
+        if (substr($path,0,5) == 'store' && $method == 'GET') {
             return $next($request);
         }
-        if (substr($path,0,4) == 'user' && $method == 'GET') {
+        if (substr($path,0,4) == 'user' && ($method == 'GET' || $method == 'PUT') ) {
             return $next($request);
         }
         //获取header里面的token
